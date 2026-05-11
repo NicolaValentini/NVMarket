@@ -48,3 +48,6 @@ next-env.d.ts
 sitemap.xml
 sitemap-*.xml
 robots.txt
+
+# database
+/data

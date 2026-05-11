@@ -3,7 +3,11 @@ import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
+import { runMigrations } from '../lib/db';
+
 import './globals.css';
+
+runMigrations();
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

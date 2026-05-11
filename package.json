@@ -29,7 +29,8 @@
     "negotiator": "^1",
     "next": "^16",
     "react": "^19",
-    "react-dom": "^19"
+    "react-dom": "^19",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
