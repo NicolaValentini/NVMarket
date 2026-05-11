@@ -46,8 +46,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./app/*"],
-      "@/theme": ["./theme/"],
       "@/lib": ["./lib/index.ts"],
+      "@/theme": ["./theme/index.ts"],
       "@/context": ["./context/index.ts"],
       "@/components": ["./components/index.ts"]
     },

@@ -17,8 +17,15 @@
     "postbuild": "node --eval \"if (process.env.CI === 'true') import('next-sitemap/bin/next-sitemap.js')\""
   },
   "dependencies": {
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/server": "^11.11.0",
+    "@emotion/styled": "^11.14.1",
     "@formatjs/intl-localematcher": "^0",
+    "@mui/icons-material": "^9.0.1",
+    "@mui/material": "^9.0.1",
     "@vercel/analytics": "^1",
+    "better-sqlite3": "^12.9.0",
     "negotiator": "^1",
     "next": "^16",
     "react": "^19",
@@ -26,6 +33,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/negotiator": "^0",
     "@types/node": "^20",
     "@types/react": "^19",
