@@ -1,0 +1,8 @@
+echo 'Pre-push checks start...';
+
+npm run build || (
+  echo "! Pre-push checks failed !"
+  exit 1
+)
+
+echo 'Pre-push checks success.';

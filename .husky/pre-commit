@@ -1,0 +1,8 @@
+echo 'Pre-commit checks start...';
+
+npx lint-staged || (
+  echo "! Pre-commit checks failed !"
+  exit 1
+)
+
+echo 'Pre-commit checks success.';

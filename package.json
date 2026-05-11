@@ -1,0 +1,56 @@
+{
+  "name": "next-template",
+  "version": "0.1.3",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "lint:staged": "eslint",
+    "format": "prettier --write .",
+    "format:staged": "prettier --write",
+    "check-types": "tsc",
+    "check-types:staged": "tsc --noEmit --pretty false",
+    "prepare": "husky",
+    "postbuild": "node --eval \"if (process.env.CI === 'true') import('next-sitemap/bin/next-sitemap.js')\""
+  },
+  "dependencies": {
+    "@formatjs/intl-localematcher": "^0",
+    "@vercel/analytics": "^1",
+    "negotiator": "^1",
+    "next": "^16",
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/negotiator": "^0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^16",
+    "eslint-config-prettier": "^10",
+    "husky": "^9",
+    "next-sitemap": "^4",
+    "prettier": "^3",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "npm run format:staged --",
+      "npm run lint:staged --"
+    ],
+    "*.{ts,tsx}": [
+      "bash -c 'tsc --noEmit --pretty false'"
+    ],
+    "*.{json,md,yml,css,scss,mjs,mts}": [
+      "npm run format:staged --"
+    ]
+  }
+}
