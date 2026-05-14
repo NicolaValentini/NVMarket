@@ -97,7 +97,6 @@ export const SupermarketDialog: FC<Props> = ({ intercepted, supermarket }) => {
             <List disablePadding sx={{ overflow: 'hidden' }}>
               <ColoredListItem
                 item={{
-                  id: '',
                   name: name?.trim()?.toUpperCase() || 'Preview',
                   color,
                 }}

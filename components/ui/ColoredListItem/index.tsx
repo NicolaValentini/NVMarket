@@ -4,7 +4,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 
 type Props = {
-  item: { id: string; name: string; color: string };
+  item: { name: string; color: string };
   divider?: boolean;
   secondaryAction?: ReactNode;
 };

@@ -3,10 +3,15 @@
 import { FC, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+
 import { deleteSupermarketAction, Supermarket } from '@/lib';
 
-import { ConfirmDialog } from '../../../ui';
 import { ErrorAlert } from '../../../feedback';
+import { ColoredListItem, ConfirmDialog } from '../../../ui';
 
 type Props = {
   intercepted?: boolean;
@@ -46,10 +51,18 @@ export const SupermarketDelete: FC<Props> = ({ intercepted, supermarket }) => {
       title='Delete Supermarket'
       onConfirm={() => void handleDelete()}
     >
-      <div>
-        Are you sure you want to delete <strong>{supermarket.name}</strong>? All
-        associated prices will be deleted too.
-      </div>
+      <Box
+        sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}
+      >
+        <Typography>Are you sure you want to delete the supermarket</Typography>
+        <Paper variant='outlined' sx={{ overflow: 'hidden' }}>
+          <List disablePadding sx={{ overflow: 'hidden' }}>
+            <ColoredListItem item={supermarket} />
+          </List>
+        </Paper>
+        <Typography>?</Typography>
+        <Typography>All associated prices will be deleted too.</Typography>
+      </Box>
 
       <ErrorAlert message={error} />
     </ConfirmDialog>
