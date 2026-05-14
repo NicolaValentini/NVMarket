@@ -1,5 +1,5 @@
 import { getSupermarketByIdAction } from '@/lib';
-import { ErrorAlert, SupermarketDialog } from '@/components';
+import { ErrorDialog, SupermarketDialog } from '@/components';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -10,7 +10,9 @@ export default async function SupermarketEditModal({ params }: Props) {
   const result = await getSupermarketByIdAction(id);
 
   if (result.isError || !result.data) {
-    return <ErrorAlert message={result.message} />;
+    return (
+      <ErrorDialog open onCloseBack title='Error' message={result.message} />
+    );
   }
 
   return (

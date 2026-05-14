@@ -1,5 +1,5 @@
 import { getSupermarketByIdAction } from '@/lib';
-import { ErrorAlert, SupermarketDelete } from '@/components';
+import { ErrorDialog, SupermarketDelete } from '@/components';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -10,7 +10,14 @@ export default async function SupermarketDeletePage({ params }: Props) {
   const result = await getSupermarketByIdAction(id);
 
   if (result.isError || !result.data) {
-    return <ErrorAlert message={result.message} />;
+    return (
+      <ErrorDialog
+        open
+        title='Error'
+        onCloseRedirect='./../'
+        message={result.message}
+      />
+    );
   }
 
   return <SupermarketDelete supermarket={result.data} />;
