@@ -3,7 +3,7 @@
 import { FC, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { deleteSupermarketAction, Supermarket, SupermarketErrors } from '@/lib';
+import { deleteSupermarketAction, Supermarket } from '@/lib';
 
 import { ConfirmDialog } from '../../../ui';
 import { ErrorAlert } from '../../../feedback';
@@ -16,8 +16,8 @@ type Props = {
 export const SupermarketDelete: FC<Props> = ({ intercepted, supermarket }) => {
   const router = useRouter();
 
+  const [error, setError] = useState('');
   const [deleting, setDeleting] = useState(false);
-  const [errors, setErrors] = useState<SupermarketErrors>({});
 
   const handleClose = () => {
     if (intercepted) router.back();
@@ -26,12 +26,12 @@ export const SupermarketDelete: FC<Props> = ({ intercepted, supermarket }) => {
 
   const handleDelete = async () => {
     if (deleting) return;
-    if (errors) setErrors({});
+    if (error) setError('');
     setDeleting(true);
 
-    const _errors = await deleteSupermarketAction(supermarket.id);
+    const result = await deleteSupermarketAction(supermarket.id);
 
-    if (Object.keys(_errors).length) setErrors(_errors);
+    if (result.isError) setError(result.message!);
     else handleClose();
 
     setDeleting(false);
@@ -51,7 +51,7 @@ export const SupermarketDelete: FC<Props> = ({ intercepted, supermarket }) => {
         associated prices will be deleted too.
       </div>
 
-      <ErrorAlert message={errors.result} />
+      <ErrorAlert message={error} />
     </ConfirmDialog>
   );
 };

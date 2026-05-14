@@ -9,4 +9,5 @@ export type SupermarketErrors = Partial<Record<keyof Supermarket, string>> & {
 export type Result<T = unknown> = {
   isError: boolean;
   data?: T;
+  message?: string;
 };

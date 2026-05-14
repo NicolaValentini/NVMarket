@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+
 import { validateSupermarket } from '../utils';
 import {
   createSupermarket,
@@ -10,16 +11,13 @@ import {
   getSupermarkets,
   updateSupermarket,
 } from '../db/api/supermarkets';
-import { SupermarketErrors } from '../types';
 
 export async function getSupermarketsAction() {
   const result = getSupermarkets();
 
-  if ('error' in result) {
-    return {
-      ...result,
-      message: 'Something went wrong during supermarkets fetching',
-    };
+  if (result.isError) {
+    result.message = 'Something went wrong during supermarkets fetching';
+    return result;
   }
 
   return result;
@@ -28,11 +26,9 @@ export async function getSupermarketsAction() {
 export async function getSupermarketByIdAction(id: string) {
   const result = getSupermarketById(id);
 
-  if ('error' in result) {
-    return {
-      ...result,
-      message: 'Something went wrong during supermarket fetching',
-    };
+  if (result.isError) {
+    result.message = 'Something went wrong during supermarket fetching';
+    return result;
   }
 
   return result;
@@ -47,14 +43,19 @@ export async function createSupermarketAction(formData: FormData) {
 
   const duplicated = getSupermarketByName(name);
 
-  if ('error' in duplicated || duplicated.data?.id) {
-    errors.name = 'A supermarket with this name already exists';
+  if (duplicated.isError) {
+    errors.result = 'Something went wrong during validation';
+    return errors;
+  }
+
+  if (duplicated.data?.id) {
+    errors.name = 'Already exist a supermarket with this name';
     return errors;
   }
 
   const result = createSupermarket(name, color);
 
-  if ('error' in result) {
+  if (result.isError) {
     errors.result = 'Something went wrong during supermarket creation';
     return errors;
   }
@@ -74,17 +75,19 @@ export async function updateSupermarketAction(formData: FormData) {
 
   const duplicated = getSupermarketByName(name);
 
-  if (
-    'error' in duplicated ||
-    (duplicated.data?.id && duplicated.data.id !== id)
-  ) {
+  if (duplicated.isError) {
+    errors.result = 'Something went wrong during validation';
+    return errors;
+  }
+
+  if (duplicated.data?.id && duplicated.data.id !== id) {
     errors.name = 'Already exist a supermarket with this name';
     return errors;
   }
 
   const result = updateSupermarket(id, name, color);
 
-  if ('error' in result) {
+  if (result.isError) {
     errors.result = 'Something went wrong during supermarket updating';
     return errors;
   }
@@ -97,13 +100,12 @@ export async function updateSupermarketAction(formData: FormData) {
 export async function deleteSupermarketAction(id: string) {
   const result = deleteSupermarket(id);
 
-  if ('error' in result) {
-    return {
-      result: 'Something went wrong during supermarket deleting',
-    } as SupermarketErrors;
+  if (result.isError) {
+    result.message = 'Something went wrong during supermarket deleting';
+    return result;
   }
 
   revalidatePath('/[locale]/supermarkets', 'page');
 
-  return {};
+  return result;
 }

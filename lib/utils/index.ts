@@ -9,7 +9,7 @@ export const validateSupermarket = (name: string, color: string) => {
   return errors;
 };
 
-export const errorResult = <T = unknown>(data?: T) =>
-  ({ isError: true, data }) as Result<T>;
-export const successResult = <T = unknown>(data?: T) =>
-  ({ isError: false, data }) as Result<T>;
+export const errorResult = <T = unknown>(data?: T, message?: string) =>
+  ({ isError: true, data, message }) as Result<T>;
+export const successResult = <T = unknown>(data?: T, message?: string) =>
+  ({ isError: false, data, message }) as Result<T>;
