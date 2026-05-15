@@ -14,7 +14,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { ThemeContext } from '@/context';
 
 type Props = {
-  onMenuClick: VoidFunction;
+  onMenuClick: () => void;
 };
 
 export const Topbar: FC<Props> = ({ onMenuClick }) => {

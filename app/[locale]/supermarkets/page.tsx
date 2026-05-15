@@ -1,11 +1,13 @@
-import { Suspense } from 'react';
-
 import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
 
-import { PageHeader, SupermarketActions, SupermarketList } from '@/components';
+import {
+  LoadingSuspense,
+  PageHeader,
+  SupermarketActions,
+  SupermarketList,
+} from '@/components';
 
-const SupermarketsPage = async () => {
+export default function SupermarketsPage() {
   return (
     <Box>
       <PageHeader
@@ -13,17 +15,9 @@ const SupermarketsPage = async () => {
         action={<SupermarketActions action='create' />}
       />
 
-      <Suspense
-        fallback={
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
-            <CircularProgress />
-          </Box>
-        }
-      >
+      <LoadingSuspense>
         <SupermarketList />
-      </Suspense>
+      </LoadingSuspense>
     </Box>
   );
-};
-
-export default SupermarketsPage;
+}
