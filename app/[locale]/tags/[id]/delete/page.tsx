@@ -1,4 +1,4 @@
-import { LoadingSuspense, RouterDialog, TagForm } from '@/components';
+import { LoadingSuspense, RouterDialog, TagDelete } from '@/components';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -10,7 +10,7 @@ export default async function TagDeletePage({ params }: Props) {
   return (
     <RouterDialog open onCloseRedirect='./../'>
       <LoadingSuspense>
-        <TagForm.WithFetch id={id} onCloseRedirect='./../' />
+        <TagDelete.WithFetch id={id} onCloseRedirect='./../' />
       </LoadingSuspense>
     </RouterDialog>
   );
