@@ -3,23 +3,9 @@ import { Suspense } from 'react';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { getSupermarketsAction } from '@/lib';
-import {
-  ErrorAlert,
-  PageHeader,
-  SupermarketActions,
-  SupermarketList,
-} from '@/components';
+import { PageHeader, SupermarketActions, SupermarketList } from '@/components';
 
 const SupermarketsPage = async () => {
-  const result = await getSupermarketsAction();
-
-  const content = result.isError ? (
-    <ErrorAlert message={result.message} />
-  ) : (
-    <SupermarketList supermarkets={result.data || []} />
-  );
-
   return (
     <Box>
       <PageHeader
@@ -34,7 +20,7 @@ const SupermarketsPage = async () => {
           </Box>
         }
       >
-        {content}
+        <SupermarketList />
       </Suspense>
     </Box>
   );

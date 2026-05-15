@@ -5,17 +5,20 @@ import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 
-import { Supermarket } from '@/lib';
+import { getSupermarketsAction } from '@/lib';
 
+import { ErrorAlert } from '../../../feedback';
 import { ColoredListItem, EmptyState } from '../../../ui';
 import { SupermarketActions } from '../SupermarketActions';
 
-type Props = {
-  supermarkets: Supermarket[];
-};
+export const SupermarketList: FC = async () => {
+  const result = await getSupermarketsAction();
 
-export const SupermarketList: FC<Props> = ({ supermarkets }) => {
-  if (supermarkets.length === 0) {
+  if (result.isError) {
+    return <ErrorAlert message={result.message} />;
+  }
+
+  if (!result.data?.length) {
     return (
       <EmptyState
         icon={<StorefrontIcon sx={{ fontSize: 64 }} />}
@@ -27,11 +30,11 @@ export const SupermarketList: FC<Props> = ({ supermarkets }) => {
   return (
     <Paper variant='outlined' sx={{ overflow: 'hidden' }}>
       <List disablePadding>
-        {supermarkets.map((supermarket, i) => (
+        {result.data.map((supermarket, i, array) => (
           <ColoredListItem
             key={supermarket.id}
             item={supermarket}
-            divider={i < supermarkets.length - 1}
+            divider={i < array.length - 1}
             secondaryAction={
               <Box sx={{ display: 'flex', gap: 1 }}>
                 <SupermarketActions action='edit' supermarket={supermarket} />
