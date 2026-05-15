@@ -1,4 +1,4 @@
-import { LoadingSuspense, RouterDialog, SupermarketForm } from '@/components';
+import { LoadingSuspense, RouterDialog, SupermarketDelete } from '@/components';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -10,7 +10,7 @@ export default async function SupermarketDeleteModal({ params }: Props) {
   return (
     <RouterDialog key='delete-supermarket' open onCloseBack>
       <LoadingSuspense>
-        <SupermarketForm.WithFetch id={id} onCloseBack />
+        <SupermarketDelete.WithFetch id={id} onCloseBack />
       </LoadingSuspense>
     </RouterDialog>
   );

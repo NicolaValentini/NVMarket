@@ -1,4 +1,4 @@
-import { LoadingSuspense, RouterDialog, SupermarketForm } from '@/components';
+import { LoadingSuspense, RouterDialog, SupermarketDelete } from '@/components';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -10,7 +10,7 @@ export default async function SupermarketDeletePage({ params }: Props) {
   return (
     <RouterDialog open onCloseRedirect='./../'>
       <LoadingSuspense>
-        <SupermarketForm.WithFetch id={id} onCloseRedirect='./../' />
+        <SupermarketDelete.WithFetch id={id} onCloseRedirect='./../' />
       </LoadingSuspense>
     </RouterDialog>
   );
