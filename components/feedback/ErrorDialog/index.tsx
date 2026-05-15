@@ -1,12 +1,10 @@
-'use client';
-
 import { FC } from 'react';
-import { useRouter } from 'next/navigation';
 
-import Alert from '@mui/material/Alert';
-import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
+
+import { RouterDialog } from '../../ui/RouterDialog';
+import { ErrorAlert } from '../ErrorAlert';
 
 type Props = {
   open: boolean;
@@ -25,25 +23,20 @@ export const ErrorDialog: FC<Props> = ({
   onCloseRedirect,
   message,
 }) => {
-  const router = useRouter();
-
   if (!message) return null;
 
-  const handleClose = () => {
-    if (onClose) onClose();
-    else if (onCloseBack) router.back();
-    else if (onCloseRedirect) router.push(onCloseRedirect);
-  };
-
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth='xs' fullWidth>
+    <RouterDialog
+      open={open}
+      onCloseAction={onClose}
+      onCloseBack={onCloseBack}
+      onCloseRedirect={onCloseRedirect}
+    >
       <DialogTitle>{title}</DialogTitle>
 
       <DialogContent>
-        <Alert severity='error' sx={{ mb: 2 }}>
-          {message}
-        </Alert>
+        <ErrorAlert message={message} />
       </DialogContent>
-    </Dialog>
+    </RouterDialog>
   );
 };
