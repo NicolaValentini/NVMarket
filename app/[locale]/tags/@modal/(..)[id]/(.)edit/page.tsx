@@ -1,5 +1,4 @@
-import { getTagByIdAction } from '@/lib';
-import { ErrorDialog, TagDialog } from '@/components';
+import { LoadingSuspense, RouterDialog, TagForm } from '@/components';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -7,18 +6,12 @@ type Props = {
 
 export default async function TagEditModal({ params }: Props) {
   const { id } = await params;
-  const result = await getTagByIdAction(id);
 
-  if (result.isError || !result.data) {
-    return (
-      <ErrorDialog
-        open
-        title='Error'
-        onCloseRedirect='./../'
-        message={result.message}
-      />
-    );
-  }
-
-  return <TagDialog key='update' intercepted tag={result.data} />;
+  return (
+    <RouterDialog key='edit-tag' open onCloseBack>
+      <LoadingSuspense>
+        <TagForm.WithFetch id={id} onCloseBack />
+      </LoadingSuspense>
+    </RouterDialog>
+  );
 }

@@ -1,5 +1,9 @@
-import { TagDialog } from '@/components';
+import { RouterDialog, TagForm } from '@/components';
 
 export default function TagCreateModal() {
-  return <TagDialog key='create' intercepted />;
+  return (
+    <RouterDialog key='create-tag' open onCloseBack>
+      <TagForm onCloseBack />
+    </RouterDialog>
+  );
 }

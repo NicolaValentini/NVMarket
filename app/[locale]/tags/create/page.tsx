@@ -1,5 +1,9 @@
-import { TagDialog } from '@/components';
+import { RouterDialog, TagForm } from '@/components';
 
 export default function TagCreatePage() {
-  return <TagDialog />;
+  return (
+    <RouterDialog open onCloseRedirect='./'>
+      <TagForm onCloseRedirect='./' />
+    </RouterDialog>
+  );
 }
