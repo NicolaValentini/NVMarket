@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { getSupermarketByIdAction } from '@/lib';
 
 import { ErrorAlert } from '../../../feedback';
-import { SupermarketForm } from '../SupermarketForm';
+import { SupermarketForm } from './SupermarketForm';
 
 type Props = {
   id: string;

@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { getTagByIdAction } from '@/lib';
 
 import { ErrorAlert } from '../../../feedback';
-import { TagForm } from '../TagForm';
+import { TagForm } from './TagForm';
 
 type Props = {
   id: string;
