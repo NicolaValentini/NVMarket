@@ -25,7 +25,7 @@ type Props = {
   supermarket: Supermarket;
 };
 
-export const SupermarketDeleteBase: FC<Props> = ({
+export const SupermarketDelete: FC<Props> = ({
   supermarket,
   onCloseBack,
   onCloseAction,

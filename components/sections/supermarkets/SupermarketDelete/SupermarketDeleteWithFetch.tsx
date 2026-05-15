@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { getSupermarketByIdAction } from '@/lib';
 
 import { ErrorAlert } from '../../../feedback';
-import { SupermarketDeleteBase } from './SupermarketDeleteBase';
+import { SupermarketDelete } from './SupermarketDelete';
 
 type Props = {
   id: string;
@@ -23,7 +23,7 @@ export const SupermarketDeleteWithFetch: FC<Props> = async ({
   return result.isError || !result.data ? (
     <ErrorAlert message={result.message} />
   ) : (
-    <SupermarketDeleteBase
+    <SupermarketDelete
       supermarket={result.data}
       onCloseBack={onCloseBack}
       onCloseAction={onCloseAction}

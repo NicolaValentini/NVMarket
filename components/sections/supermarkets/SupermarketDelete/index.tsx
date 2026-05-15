@@ -1,5 +1,5 @@
 import { SupermarketDeleteWithFetch } from './SupermarketDeleteWithFetch';
-import { SupermarketDeleteBase } from './SupermarketDeleteBase';
+import { SupermarketDelete as SupermarketDeleteBase } from './SupermarketDelete';
 
 export const SupermarketDelete = Object.assign(SupermarketDeleteBase, {
   WithFetch: SupermarketDeleteWithFetch,
