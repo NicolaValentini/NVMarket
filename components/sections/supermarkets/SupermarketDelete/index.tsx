@@ -10,8 +10,7 @@ import Typography from '@mui/material/Typography';
 
 import { deleteSupermarketAction, Supermarket } from '@/lib';
 
-import { ColoredListItem } from '../../../ui';
-import { ConfirmDialog, ErrorAlert } from '../../../feedback';
+import { ColoredListItem, ConfirmDialog, ErrorAlert } from '../../../index';
 
 type Props = {
   intercepted?: boolean;
@@ -56,7 +55,7 @@ export const SupermarketDelete: FC<Props> = ({ intercepted, supermarket }) => {
       >
         <Typography>Are you sure you want to delete the supermarket</Typography>
         <Paper variant='outlined' sx={{ overflow: 'hidden' }}>
-          <List disablePadding sx={{ overflow: 'hidden' }}>
+          <List disablePadding>
             <ColoredListItem item={supermarket} />
           </List>
         </Paper>
