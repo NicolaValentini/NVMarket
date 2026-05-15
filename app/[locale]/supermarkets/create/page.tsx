@@ -1,5 +1,9 @@
-import { SupermarketDialog } from '@/components';
+import { RouterDialog, SupermarketForm } from '@/components';
 
 export default function SupermarketCreatePage() {
-  return <SupermarketDialog />;
+  return (
+    <RouterDialog open onCloseRedirect='./'>
+      <SupermarketForm onCloseRedirect='./' />
+    </RouterDialog>
+  );
 }

@@ -1,5 +1,9 @@
-import { SupermarketDialog } from '@/components';
+import { RouterDialog, SupermarketForm } from '@/components';
 
 export default function SupermarketCreateModal() {
-  return <SupermarketDialog key='create' intercepted />;
+  return (
+    <RouterDialog key='create-supermarket' open onCloseBack>
+      <SupermarketForm onCloseBack />
+    </RouterDialog>
+  );
 }

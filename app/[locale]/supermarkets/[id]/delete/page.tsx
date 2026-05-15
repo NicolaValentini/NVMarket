@@ -1,5 +1,4 @@
-import { getSupermarketByIdAction } from '@/lib';
-import { ErrorDialog, SupermarketDelete } from '@/components';
+import { LoadingSuspense, RouterDialog, SupermarketForm } from '@/components';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -7,18 +6,12 @@ type Props = {
 
 export default async function SupermarketDeletePage({ params }: Props) {
   const { id } = await params;
-  const result = await getSupermarketByIdAction(id);
 
-  if (result.isError || !result.data) {
-    return (
-      <ErrorDialog
-        open
-        title='Error'
-        onCloseRedirect='./../'
-        message={result.message}
-      />
-    );
-  }
-
-  return <SupermarketDelete supermarket={result.data} />;
+  return (
+    <RouterDialog open onCloseRedirect='./../'>
+      <LoadingSuspense>
+        <SupermarketForm.WithFetch id={id} onCloseRedirect='./../' />
+      </LoadingSuspense>
+    </RouterDialog>
+  );
 }
