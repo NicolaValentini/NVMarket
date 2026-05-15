@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation';
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import DialogTitle from '@mui/material/DialogTitle';
+import ListItemText from '@mui/material/ListItemText';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -20,9 +22,7 @@ import {
   updateTagAction,
 } from '@/lib';
 
-import { ErrorAlert } from '../../../feedback';
-import { ColorInput, TagChip } from '../../../ui';
-import { TagFormWithFetch } from './TagFormWithFetch';
+import { ColorInput, ErrorAlert, TagChip } from '../../../index';
 
 type Props = {
   onCloseBack?: boolean | undefined;
@@ -31,7 +31,7 @@ type Props = {
   tag?: Tag | undefined;
 };
 
-const TagFormComponent: FC<Props> = ({
+export const TagForm: FC<Props> = ({
   tag,
   onCloseBack,
   onCloseAction,
@@ -100,13 +100,19 @@ const TagFormComponent: FC<Props> = ({
 
         <Paper variant='outlined'>
           <List disablePadding>
-            <TagChip
-              tag={{
-                id: '',
-                name: name?.trim()?.toUpperCase() || 'Preview',
-                color,
-              }}
-            />
+            <ListItem>
+              <ListItemText
+                primary={
+                  <TagChip
+                    tag={{
+                      id: '',
+                      name: name?.trim()?.toUpperCase() || 'Preview',
+                      color,
+                    }}
+                  />
+                }
+              />
+            </ListItem>
           </List>
         </Paper>
 
@@ -125,7 +131,3 @@ const TagFormComponent: FC<Props> = ({
     </form>
   );
 };
-
-export const TagForm = Object.assign(TagFormComponent, {
-  WithFetch: TagFormWithFetch,
-});

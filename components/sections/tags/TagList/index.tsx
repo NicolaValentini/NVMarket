@@ -3,13 +3,14 @@ import { FC } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 
 import { getTagsAction } from '@/lib';
 
-import { ErrorAlert } from '../../../feedback';
-import { ColoredListItem, EmptyState } from '../../../ui';
-import { TagActions } from '../TagActions';
+import { EmptyState, ErrorAlert, TagChip } from '../../../index';
+import { TagActions } from '../index';
 
 export const TagList: FC = async () => {
   const result = await getTagsAction();
@@ -28,12 +29,11 @@ export const TagList: FC = async () => {
   }
 
   return (
-    <Paper variant='outlined' sx={{ overflow: 'hidden' }}>
+    <Paper variant='outlined'>
       <List disablePadding>
         {result.data.map((tag, i, array) => (
-          <ColoredListItem
+          <ListItem
             key={tag.id}
-            item={tag}
             divider={i < array.length - 1}
             secondaryAction={
               <Box sx={{ display: 'flex', gap: 1 }}>
@@ -42,7 +42,9 @@ export const TagList: FC = async () => {
                 <TagActions action='delete' tag={tag} />
               </Box>
             }
-          />
+          >
+            <ListItemText primary={<TagChip tag={tag} />} />
+          </ListItem>
         ))}
       </List>
     </Paper>
