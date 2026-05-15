@@ -9,8 +9,9 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 
 import { getTagsAction } from '@/lib';
 
-import { EmptyState, ErrorAlert, TagChip } from '../../../index';
-import { TagActions } from '../index';
+import { ErrorAlert } from '../../../feedback';
+import { EmptyState, TagChip } from '../../../ui';
+import { TagActions } from '../TagActions';
 
 export const TagList: FC = async () => {
   const result = await getTagsAction();

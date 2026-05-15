@@ -22,7 +22,8 @@ import {
   updateTagAction,
 } from '@/lib';
 
-import { ColorInput, ErrorAlert, TagChip } from '../../../index';
+import { ErrorAlert } from '../../../feedback';
+import { ColorInput, TagChip } from '../../../ui';
 
 type Props = {
   onCloseBack?: boolean | undefined;
