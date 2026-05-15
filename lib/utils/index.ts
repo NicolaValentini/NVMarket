@@ -1,7 +1,16 @@
-import { Result, SupermarketErrors } from '../types';
+import { Result, SupermarketErrors, TagErrors } from '../types';
 
 export const validateSupermarket = (name: string, color: string) => {
   const errors: SupermarketErrors = {};
+
+  if (!name) errors.name = 'Field required';
+  if (!color) errors.color = 'Field required';
+
+  return errors;
+};
+
+export const validateTag = (name: string, color: string) => {
+  const errors: TagErrors = {};
 
   if (!name) errors.name = 'Field required';
   if (!color) errors.color = 'Field required';

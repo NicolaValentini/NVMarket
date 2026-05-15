@@ -1,8 +1,12 @@
-import { Supermarket } from './dao';
+import { Supermarket, Tag } from './dao';
 
 export * from './dao';
 
 export type SupermarketErrors = Partial<Record<keyof Supermarket, string>> & {
+  result?: string;
+};
+
+export type TagErrors = Partial<Record<keyof Tag, string>> & {
   result?: string;
 };
 
