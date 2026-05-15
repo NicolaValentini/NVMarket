@@ -8,8 +8,8 @@ import Typography from '@mui/material/Typography';
 
 import { deleteTagAction, Tag } from '@/lib';
 
-import { ErrorAlert } from '../../../feedback';
-import { ConfirmDialog, TagChip } from '../../../ui';
+import { TagChip } from '../../../ui';
+import { ConfirmDialog, ErrorAlert } from '../../../feedback';
 
 type Props = {
   intercepted?: boolean;

@@ -10,8 +10,8 @@ import Typography from '@mui/material/Typography';
 
 import { deleteSupermarketAction, Supermarket } from '@/lib';
 
-import { ErrorAlert } from '../../../feedback';
-import { ColoredListItem, ConfirmDialog } from '../../../ui';
+import { ColoredListItem } from '../../../ui';
+import { ConfirmDialog, ErrorAlert } from '../../../feedback';
 
 type Props = {
   intercepted?: boolean;
