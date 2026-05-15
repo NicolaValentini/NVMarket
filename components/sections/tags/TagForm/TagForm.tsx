@@ -39,7 +39,7 @@ export const TagForm: FC<Props> = ({
 }) => {
   const router = useRouter();
 
-  const isUpdate = !!tag?.id;
+  const isEdit = !!tag?.id;
 
   const handleClose = () => {
     if (onCloseAction) onCloseAction();
@@ -58,7 +58,7 @@ export const TagForm: FC<Props> = ({
     if (Object.keys(errors).length) setErrors({});
     setLoading(true);
 
-    const _errors = isUpdate
+    const _errors = isEdit
       ? await updateTagAction(formData)
       : await createTagAction(formData);
 
@@ -70,9 +70,9 @@ export const TagForm: FC<Props> = ({
 
   return (
     <form action={formAction}>
-      {isUpdate && <input type='hidden' name='id' value={tag.id} />}
+      {isEdit && <input type='hidden' name='id' value={tag.id} />}
 
-      <DialogTitle>{isUpdate ? 'Update Tag' : 'New Tag'}</DialogTitle>
+      <DialogTitle>{isEdit ? 'Edit Tag' : 'New Tag'}</DialogTitle>
 
       <DialogContent>
         <TextField

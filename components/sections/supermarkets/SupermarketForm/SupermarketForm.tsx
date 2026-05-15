@@ -38,7 +38,7 @@ export const SupermarketForm: FC<Props> = ({
 }) => {
   const router = useRouter();
 
-  const isUpdate = !!supermarket?.id;
+  const isEdit = !!supermarket?.id;
 
   const handleClose = () => {
     if (onCloseAction) onCloseAction();
@@ -57,7 +57,7 @@ export const SupermarketForm: FC<Props> = ({
     if (Object.keys(errors).length) setErrors({});
     setLoading(true);
 
-    const _errors = isUpdate
+    const _errors = isEdit
       ? await updateSupermarketAction(formData)
       : await createSupermarketAction(formData);
 
@@ -69,10 +69,10 @@ export const SupermarketForm: FC<Props> = ({
 
   return (
     <form action={formAction}>
-      {isUpdate && <input type='hidden' name='id' value={supermarket.id} />}
+      {isEdit && <input type='hidden' name='id' value={supermarket.id} />}
 
       <DialogTitle>
-        {isUpdate ? 'Update Supermarket' : 'New Supermarket'}
+        {isEdit ? 'Edit Supermarket' : 'New Supermarket'}
       </DialogTitle>
 
       <DialogContent>
