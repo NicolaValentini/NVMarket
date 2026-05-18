@@ -39,6 +39,22 @@ export function getTagByName(name: string) {
   }
 }
 
+export function getTagsByProductId(id: string) {
+  try {
+    return successResult(
+      getDb()
+        .prepare<
+          [string],
+          Tag
+        >('SELECT t.* FROM tags t JOIN product_tags pt ON pt.tag_id = t.id WHERE pt.product_id = ?')
+        .all(id),
+    );
+  } catch (error) {
+    console.error('Failed to fetch tags', error);
+    return errorResult<Tag[]>();
+  }
+}
+
 export function createTag(name: string, color: string) {
   try {
     getDb()

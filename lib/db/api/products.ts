@@ -1,0 +1,158 @@
+import 'server-only';
+
+import { getDb, getTagsByProductId } from '../../db';
+import { Product, ProductWithTag } from '../../types';
+import { errorResult, successResult } from '../../utils';
+
+export function getProducts() {
+  try {
+    return successResult(
+      getDb()
+        .prepare<[], Product>('SELECT * FROM products ORDER BY name ASC')
+        .all(),
+    );
+  } catch (error) {
+    console.error('Failed to fetch products', error);
+    return errorResult<ProductWithTag[]>();
+  }
+}
+
+export function getProductsWithTags() {
+  try {
+    const result = getProducts();
+
+    if (result.isError) {
+      throw new Error('Failed to fetch products without tags');
+    }
+
+    return successResult(
+      result.data?.map(
+        (product): ProductWithTag => ({
+          ...product,
+          tags: getTagsByProductId(product.id)?.data ?? [],
+        }),
+      ) ?? [],
+    );
+  } catch (error) {
+    console.error('Failed to fetch products', error);
+    return errorResult<ProductWithTag[]>();
+  }
+}
+
+export function getProductById(id: string) {
+  try {
+    return successResult(
+      getDb()
+        .prepare<[string], Product>('SELECT * FROM products WHERE id = ?')
+        .get(id),
+    );
+  } catch (error) {
+    console.error('Failed to fetch product', error);
+    return errorResult<Product | undefined>();
+  }
+}
+
+export function getProductWithTagsById(id: string) {
+  try {
+    const result = getProductById(id);
+
+    if (result.isError) {
+      throw new Error('Failed to fetch product without tags');
+    }
+
+    if (!result.data) {
+      return successResult(undefined);
+    }
+
+    return successResult({
+      ...result.data,
+      tags: getTagsByProductId(result.data.id)?.data ?? [],
+    });
+  } catch (error) {
+    console.error('Failed to fetch product', error);
+    return errorResult<ProductWithTag | undefined>();
+  }
+}
+
+export function getProductByName(name: string) {
+  try {
+    return successResult(
+      getDb()
+        .prepare<[string], Product>('SELECT * FROM products WHERE name = ?')
+        .get(name.trim().toUpperCase()),
+    );
+  } catch (error) {
+    console.error('Failed to fetch product', error);
+    return errorResult<Product | undefined>();
+  }
+}
+
+export function createProduct(name: string, tags: string[]) {
+  try {
+    const id = crypto.randomUUID();
+
+    const insertProduct = getDb().prepare<[string, string]>(
+      'INSERT INTO products (id, name) VALUES (?, ?)',
+    );
+
+    const insertTag = getDb().prepare<[string, string]>(
+      'INSERT INTO product_tags (product_id, tag_id) VALUES (?, ?)',
+    );
+
+    const transaction = getDb().transaction(() => {
+      insertProduct.run(id, name.trim().toUpperCase());
+      for (const tagId of tags) {
+        insertTag.run(id, tagId);
+      }
+    });
+
+    transaction();
+
+    return successResult();
+  } catch (error) {
+    console.error('Failed to create product', error);
+    return errorResult();
+  }
+}
+
+export function updateProduct(id: string, name: string, tags: string[]) {
+  try {
+    const updateProduct = getDb().prepare<[string, string]>(
+      'UPDATE products SET name = ? WHERE id = ?',
+    );
+
+    const deleteTags = getDb().prepare<[string]>(
+      'DELETE FROM product_tags WHERE product_id = ?',
+    );
+
+    const insertTag = getDb().prepare<[string, string]>(
+      'INSERT INTO product_tags (product_id, tag_id) VALUES (?, ?)',
+    );
+
+    const transaction = getDb().transaction(() => {
+      updateProduct.run(name.trim().toUpperCase(), id);
+      deleteTags.run(id);
+      for (const tagId of tags) {
+        insertTag.run(id, tagId);
+      }
+    });
+
+    transaction();
+
+    return successResult();
+  } catch (error) {
+    console.error('Failed to update product', error);
+    return errorResult();
+  }
+}
+
+export function deleteProduct(id: string) {
+  try {
+    getDb().prepare<[string]>('DELETE FROM products WHERE id = ?').run(id);
+
+    return successResult();
+  } catch (error) {
+    console.error('Failed to delete product', error);
+    return errorResult();
+  }
+}
