@@ -21,7 +21,7 @@ export const TagFormWithFetch: FC<Props> = async ({
   const result = await getTagByIdAction(id);
 
   return result.isError || !result.data ? (
-    <ErrorAlert message={result.message} />
+    <ErrorAlert message={result.message ?? 'No data found'} />
   ) : (
     <TagForm
       tag={result.data}

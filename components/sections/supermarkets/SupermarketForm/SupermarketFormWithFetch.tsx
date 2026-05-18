@@ -21,7 +21,7 @@ export const SupermarketFormWithFetch: FC<Props> = async ({
   const result = await getSupermarketByIdAction(id);
 
   return result.isError || !result.data ? (
-    <ErrorAlert message={result.message} />
+    <ErrorAlert message={result.message ?? 'No data found'} />
   ) : (
     <SupermarketForm
       supermarket={result.data}

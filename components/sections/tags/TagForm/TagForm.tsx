@@ -107,7 +107,7 @@ export const TagForm: FC<Props> = ({
                   <TagChip
                     tag={{
                       id: '',
-                      name: name?.trim()?.toUpperCase() || 'Preview',
+                      name: name?.trim()?.toUpperCase() || 'PREVIEW',
                       color,
                     }}
                   />

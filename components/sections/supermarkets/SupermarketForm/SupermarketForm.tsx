@@ -103,7 +103,7 @@ export const SupermarketForm: FC<Props> = ({
           <List disablePadding>
             <ColoredListItem
               item={{
-                name: name?.trim()?.toUpperCase() || 'Preview',
+                name: name?.trim()?.toUpperCase() || 'PREVIEW',
                 color,
               }}
             />

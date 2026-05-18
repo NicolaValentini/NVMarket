@@ -21,7 +21,7 @@ export const SupermarketDeleteWithFetch: FC<Props> = async ({
   const result = await getSupermarketByIdAction(id);
 
   return result.isError || !result.data ? (
-    <ErrorAlert message={result.message} />
+    <ErrorAlert message={result.message ?? 'No data found'} />
   ) : (
     <SupermarketDelete
       supermarket={result.data}
