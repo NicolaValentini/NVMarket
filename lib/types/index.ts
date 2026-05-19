@@ -20,6 +20,13 @@ export type ProductErrors = Partial<Record<keyof ProductWithTag, string>> & {
   result?: string;
 };
 
+export type CartItemUpdate = {
+  count: number;
+  productId: string;
+  message?: string;
+  isError?: boolean;
+};
+
 export type Result<T = unknown> = {
   isError: boolean;
   data?: T;
