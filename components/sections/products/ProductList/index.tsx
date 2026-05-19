@@ -38,6 +38,8 @@ export const ProductList: FC = async () => {
             divider={i < array.length - 1}
             secondaryAction={
               <Box sx={{ display: 'flex', gap: 1 }}>
+                <ProductActions action='buy' product={product} />
+
                 <ProductActions action='edit' product={product} />
 
                 <ProductActions action='delete' product={product} />

@@ -9,12 +9,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { Product } from '@/lib';
+import { ProductWithQuantity } from '@/lib';
 import { I18nContext } from '@/context';
 
+import { QuantityInput } from '../../../ui';
+
 type Props = {
-  action: 'create' | 'edit' | 'delete';
-  product?: Product;
+  action: 'create' | 'buy' | 'edit' | 'delete';
+  product?: ProductWithQuantity;
 };
 
 export const ProductActions: FC<Props> = ({ action, product }) => {
@@ -31,6 +33,10 @@ export const ProductActions: FC<Props> = ({ action, product }) => {
         Add
       </Button>
     );
+  }
+
+  if (action === 'buy' && product?.id) {
+    return <QuantityInput value={product.quantity} productId={product.id} />;
   }
 
   if (action === 'edit' && product?.id) {
