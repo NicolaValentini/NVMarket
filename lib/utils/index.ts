@@ -20,7 +20,7 @@ export const validateTag = (name: string, color: string) => {
 
 export const validateProduct = (name: string, tags: string[]) => {
   const errors: ProductErrors = {};
-  console.log({ tags });
+
   if (!name) errors.name = 'Field required';
   if (!tags.length) errors.tags = 'Field required';
 

@@ -10,7 +10,7 @@ import {
   getSupermarketByName,
   getSupermarkets,
   updateSupermarket,
-} from '../db/api/supermarkets';
+} from '../db';
 
 export async function getSupermarketsAction() {
   const result = getSupermarkets();
