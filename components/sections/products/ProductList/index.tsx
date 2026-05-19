@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -7,14 +7,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 
-import { getProductsWithTagsAction } from '@/lib';
+import { getProductsWithQuantityAction } from '@/lib';
 
 import { ErrorAlert } from '../../../feedback';
-import { EmptyState, TagChip } from '../../../ui';
+import { EmptyState } from '../../../ui';
 import { ProductActions } from '../ProductActions';
 
 export const ProductList: FC = async () => {
-  const result = await getProductsWithTagsAction();
+  const result = await getProductsWithQuantityAction();
 
   if (result.isError) {
     return <ErrorAlert message={result.message} />;
@@ -44,14 +44,7 @@ export const ProductList: FC = async () => {
               </Box>
             }
           >
-            <ListItemText>
-              {product.tags.map(tag => (
-                <Fragment key={tag.id}>
-                  <TagChip tag={tag} />{' '}
-                </Fragment>
-              ))}{' '}
-              {product.name}
-            </ListItemText>
+            <ListItemText>{product.name}</ListItemText>
           </ListItem>
         ))}
       </List>

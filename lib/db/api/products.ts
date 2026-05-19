@@ -1,41 +1,22 @@
 import 'server-only';
 
 import { getDb, getTagsByProductId } from '../../db';
-import { Product, ProductWithTag } from '../../types';
 import { errorResult, successResult } from '../../utils';
+import { Product, ProductWithQuantity, ProductWithTag } from '../../types';
 
-export function getProducts() {
+export function getProductsWithQuantity() {
   try {
     return successResult(
       getDb()
-        .prepare<[], Product>('SELECT * FROM products ORDER BY name ASC')
+        .prepare<
+          [],
+          ProductWithQuantity
+        >('SELECT p.*, c.quantity AS quantity FROM products p LEFT JOIN cart_items c ON p.id = c.product_id ORDER BY name ASC')
         .all(),
     );
   } catch (error) {
     console.error('Failed to fetch products', error);
-    return errorResult<ProductWithTag[]>();
-  }
-}
-
-export function getProductsWithTags() {
-  try {
-    const result = getProducts();
-
-    if (result.isError) {
-      throw new Error('Failed to fetch products without tags');
-    }
-
-    return successResult(
-      result.data?.map(
-        (product): ProductWithTag => ({
-          ...product,
-          tags: getTagsByProductId(product.id)?.data ?? [],
-        }),
-      ) ?? [],
-    );
-  } catch (error) {
-    console.error('Failed to fetch products', error);
-    return errorResult<ProductWithTag[]>();
+    return errorResult<ProductWithQuantity[]>();
   }
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FC, Fragment, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import List from '@mui/material/List';
@@ -22,7 +22,7 @@ import {
   updateProductAction,
 } from '@/lib';
 
-import { TagChip, TagSelect } from '../../../ui';
+import { TagSelect } from '../../../ui';
 import { ErrorAlert } from '../../../feedback';
 
 type Props = {
@@ -110,11 +110,6 @@ export const ProductForm: FC<Props> = ({
           <List disablePadding>
             <ListItem>
               <ListItemText>
-                {selectedTags.map(tag => (
-                  <Fragment key={tag}>
-                    <TagChip tag={JSON.parse(tag) as Tag} />{' '}
-                  </Fragment>
-                ))}{' '}
                 {name?.trim()?.toUpperCase() || 'PREVIEW'}
               </ListItemText>
             </ListItem>

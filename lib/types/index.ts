@@ -1,6 +1,8 @@
-import { Product, Supermarket, Tag } from './dao';
+import { CartItem, Product, Supermarket, Tag } from './dao';
 
 export * from './dao';
+
+export type ProductWithQuantity = Product & Pick<CartItem, 'quantity'>;
 
 export type ProductWithTag = Product & {
   tags: Tag[];

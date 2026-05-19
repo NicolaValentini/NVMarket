@@ -8,13 +8,13 @@ import {
   deleteProduct,
   getProductById,
   getProductByName,
-  getProductsWithTags,
+  getProductsWithQuantity,
   getProductWithTagsById,
   updateProduct,
-} from '../db/api/products';
+} from '../db';
 
-export async function getProductsWithTagsAction() {
-  const result = getProductsWithTags();
+export async function getProductsWithQuantityAction() {
+  const result = getProductsWithQuantity();
 
   if (result.isError) {
     result.message = 'Something went wrong during products fetching';
