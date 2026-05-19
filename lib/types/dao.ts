@@ -9,6 +9,12 @@ export type Tag = {
   color: string;
 };
 
+export type ProductTag = {
+  id: string;
+  product_id: string;
+  tag_id: string;
+};
+
 export type Supermarket = {
   id: string;
   name: string;

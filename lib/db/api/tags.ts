@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { getDb } from '../../db';
-import { Tag } from '../../types';
+import { ProductTag, Tag } from '../../types';
 import { errorResult, successResult } from '../../utils';
 
 export function getTags() {
@@ -52,6 +52,22 @@ export function getTagsByProductId(id: string) {
   } catch (error) {
     console.error('Failed to fetch tags', error);
     return errorResult<Tag[]>();
+  }
+}
+
+export function checkTagUsageById(id: string) {
+  try {
+    return successResult(
+      getDb()
+        .prepare<
+          [string],
+          ProductTag
+        >('SELECT * FROM product_tags WHERE tag_id = ?')
+        .all(id),
+    );
+  } catch (error) {
+    console.error('Failed to fetch tags', error);
+    return errorResult<ProductTag[]>();
   }
 }
 

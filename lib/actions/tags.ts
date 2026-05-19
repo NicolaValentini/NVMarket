@@ -4,13 +4,14 @@ import { revalidatePath } from 'next/cache';
 
 import { validateTag } from '../utils';
 import {
+  checkTagUsageById,
   createTag,
   deleteTag,
   getTagById,
   getTagByName,
   getTags,
   updateTag,
-} from '../db/api/tags';
+} from '../db';
 
 export async function getTagsAction() {
   const result = getTags();
@@ -98,7 +99,19 @@ export async function updateTagAction(formData: FormData) {
 }
 
 export async function deleteTagAction(id: string) {
-  // TODO controllare se sono presenti prodotti associati al tag, se sono presenti bloccare l'eliminazione
+  const result1 = checkTagUsageById(id);
+
+  if (result1.isError) {
+    result1.message = 'Something went wrong during validation';
+    return result1;
+  }
+
+  if (result1.data?.length) {
+    result1.isError = true;
+    result1.message = 'Tag with products associated';
+    return result1;
+  }
+
   const result = deleteTag(id);
 
   if (result.isError) {
