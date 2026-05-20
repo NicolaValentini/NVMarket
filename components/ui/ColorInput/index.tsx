@@ -1,7 +1,10 @@
 import { FC } from 'react';
 
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import FormHelperText from '@mui/material/FormHelperText';
 
 import { COLORS } from '@/lib';
 
@@ -18,43 +21,63 @@ export const ColorInput: FC<Props> = ({
   disabled,
   error,
 }) => {
+  const labelId = 'color-input-label';
+
   return (
-    <>
-      <Typography variant='body2' sx={{ mb: 1 }}>
+    <FormControl
+      variant='outlined'
+      error={!!error}
+      disabled={disabled}
+      fullWidth
+    >
+      <InputLabel id={labelId} shrink>
         Color
-      </Typography>
+      </InputLabel>
 
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-        {COLORS.map(color => (
+      <OutlinedInput
+        notched
+        readOnly
+        label='Color'
+        tabIndex={disabled ? -1 : 0}
+        inputComponent={() => null}
+        sx={{ cursor: 'default', px: 1.75, py: 2 }}
+        startAdornment={
           <Box
-            key={color}
-            onClick={() => !disabled && setColor(color)}
             sx={{
-              width: 32,
-              height: 32,
-              borderRadius: '50%',
-              bgcolor: color,
-              cursor: 'pointer',
-              border:
-                selectedColor === color
-                  ? '3px solid white'
-                  : '3px solid transparent',
-              outline: selectedColor === color ? '2px solid' : 'none',
-              outlineColor: color,
-              transition: 'transform 0.1s',
-              '&:hover': { transform: 'scale(1.15)' },
+              width: '100%',
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
             }}
-          />
-        ))}
-      </Box>
+          >
+            {COLORS.map(color => (
+              <Box
+                key={color}
+                onClick={() => !disabled && setColor(color)}
+                sx={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: '50%',
+                  bgcolor: color,
+                  cursor: disabled ? 'not-allowed' : 'pointer',
+                  border:
+                    selectedColor === color
+                      ? '3px solid white'
+                      : '3px solid transparent',
+                  outline: selectedColor === color ? '2px solid' : 'none',
+                  outlineColor: color,
+                  transition: 'transform 0.1s',
+                  '&:hover': !disabled ? { transform: 'scale(1.15)' } : {},
+                }}
+              />
+            ))}
+          </Box>
+        }
+      />
 
-      {error && (
-        <Typography variant='caption' color='error'>
-          {error}
-        </Typography>
-      )}
+      <FormHelperText>{error}</FormHelperText>
 
       <input type='hidden' name='color' value={selectedColor} />
-    </>
+    </FormControl>
   );
 };

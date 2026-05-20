@@ -1,4 +1,4 @@
-export * from './ColoredListItem';
+export * from './ColoredItems';
 export * from './ColorInput';
 export * from './EmptyState';
 export * from './PageHeader';
