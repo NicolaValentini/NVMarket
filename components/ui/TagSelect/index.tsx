@@ -4,9 +4,9 @@ import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import FormHelperText from '@mui/material/FormHelperText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { Tag } from '@/lib';
@@ -36,50 +36,44 @@ export const TagSelect: FC<Props> = ({
   };
 
   return (
-    <>
-      <FormControl fullWidth error={!!error} disabled={disabled}>
-        <InputLabel id='tags-label'>Tags</InputLabel>
+    <FormControl fullWidth error={!!error} disabled={disabled}>
+      <InputLabel id='tags-label'>Tags</InputLabel>
 
-        <Select
-          multiple
-          value={selectedTags}
-          onChange={handleChange}
-          labelId='tags-label'
-          input={<OutlinedInput label='Tags' />}
-          renderValue={selected => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map(value => (
-                <TagChip key={value} tag={JSON.parse(value)} />
-              ))}
-            </Box>
-          )}
-        >
-          {tags.map(tag => {
-            const value = JSON.stringify(tag);
-            const selected = selectedTags.includes(value);
+      <Select
+        multiple
+        value={selectedTags}
+        onChange={handleChange}
+        labelId='tags-label'
+        input={<OutlinedInput label='Tags' />}
+        renderValue={selected => (
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+            {selected.map(value => (
+              <TagChip key={value} tag={JSON.parse(value)} />
+            ))}
+          </Box>
+        )}
+      >
+        {tags.map(tag => {
+          const value = JSON.stringify(tag);
+          const selected = selectedTags.includes(value);
 
-            return (
-              <MenuItem key={tag.id} value={value}>
-                <Checkbox checked={selected} />
+          return (
+            <MenuItem key={tag.id} value={value}>
+              <Checkbox checked={selected} />
 
-                <TagChip tag={tag} />
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+              <TagChip tag={tag} />
+            </MenuItem>
+          );
+        })}
+      </Select>
 
-      {error && (
-        <Typography variant='caption' color='error'>
-          {error}
-        </Typography>
-      )}
+      <FormHelperText>{error}</FormHelperText>
 
       <input
         type='hidden'
         name='tags'
         value={selectedTags.map(tag => JSON.parse(tag)?.id)}
       />
-    </>
+    </FormControl>
   );
 };

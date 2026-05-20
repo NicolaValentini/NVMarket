@@ -4,5 +4,6 @@ export * from './EmptyState';
 export * from './PageHeader';
 export * from './QuantityInput';
 export * from './RouterDialog';
+export * from './SupermarketSelect';
 export * from './TagChip';
 export * from './TagSelect';
