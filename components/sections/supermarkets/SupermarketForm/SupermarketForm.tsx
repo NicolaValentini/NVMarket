@@ -75,7 +75,14 @@ export const SupermarketForm: FC<Props> = ({
         {isEdit ? 'Edit Supermarket' : 'New Supermarket'}
       </DialogTitle>
 
-      <DialogContent>
+      <DialogContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3,
+          pt: '8px !important',
+        }}
+      >
         <TextField
           id='name'
           autoFocus
@@ -89,7 +96,6 @@ export const SupermarketForm: FC<Props> = ({
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
             setName(event.target.value);
           }}
-          sx={{ mt: 1, mb: 3 }}
         />
 
         <ColorInput

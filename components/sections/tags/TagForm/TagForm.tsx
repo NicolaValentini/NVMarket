@@ -75,7 +75,14 @@ export const TagForm: FC<Props> = ({
 
       <DialogTitle>{isEdit ? 'Edit Tag' : 'New Tag'}</DialogTitle>
 
-      <DialogContent>
+      <DialogContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3,
+          pt: '8px !important',
+        }}
+      >
         <TextField
           id='name'
           autoFocus
@@ -89,7 +96,6 @@ export const TagForm: FC<Props> = ({
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
             setName(event.target.value);
           }}
-          sx={{ mt: 1, mb: 3 }}
         />
 
         <ColorInput

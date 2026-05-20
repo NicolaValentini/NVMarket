@@ -53,7 +53,7 @@ export const ProductForm: FC<Props> = ({
   };
 
   const [name, setName] = useState(product?.name ?? '');
-  const [selectedTags, setTags] = useState<string[]>(
+  const [selectedTags, setTags] = useState(
     product?.tags?.map(tag => JSON.stringify(tag)) ?? [],
   );
 
@@ -81,7 +81,14 @@ export const ProductForm: FC<Props> = ({
 
       <DialogTitle>{isEdit ? 'Edit Product' : 'New Product'}</DialogTitle>
 
-      <DialogContent>
+      <DialogContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3,
+          pt: '8px !important',
+        }}
+      >
         <TextField
           id='name'
           autoFocus
@@ -95,7 +102,6 @@ export const ProductForm: FC<Props> = ({
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
             setName(event.target.value);
           }}
-          sx={{ mt: 1, mb: 3 }}
         />
 
         <TagSelect
@@ -106,7 +112,7 @@ export const ProductForm: FC<Props> = ({
           error={tagsError ?? errors.tags}
         />
 
-        <Paper variant='outlined' sx={{ mt: 3 }}>
+        <Paper variant='outlined'>
           <List disablePadding>
             <ListItem>
               <ListItemText>
