@@ -1,6 +1,8 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+
+import { FavoriteUpdate } from '../types';
 import { errorResult, validateId, validatePrice } from '../utils';
 import {
   createPrice,
@@ -8,6 +10,7 @@ import {
   getPriceById,
   getPriceByNameAndProductAndSupermarket,
   getPricesByProductId,
+  setFavoritePrice,
   updatePrice,
 } from '../db';
 
@@ -144,6 +147,35 @@ export async function updatePriceAction(formData: FormData) {
   revalidatePath('/[locale]/products', 'page');
 
   return errors;
+}
+
+export async function setFavoritePriceAction(prevState: FavoriteUpdate) {
+  const errors = validateId(prevState.id);
+
+  if (Object.keys(errors).length) {
+    return {
+      isError: true,
+      message: 'Missing id',
+      id: prevState.id,
+      favorite: prevState.favorite,
+    } as FavoriteUpdate;
+  }
+
+  const result = setFavoritePrice(prevState.id, !prevState.favorite);
+
+  if (result.isError) {
+    return {
+      isError: true,
+      message: 'Something went wrong during price updating',
+      id: prevState.id,
+      favorite: prevState.favorite,
+    } as FavoriteUpdate;
+  }
+
+  return {
+    id: prevState.id,
+    favorite: !prevState.favorite,
+  } as FavoriteUpdate;
 }
 
 export async function deletePriceAction(id: string) {

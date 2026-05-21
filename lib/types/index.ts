@@ -39,6 +39,13 @@ export type CartItemUpdate = {
   isError?: boolean;
 };
 
+export type FavoriteUpdate = {
+  id: string;
+  favorite: boolean;
+  message?: string;
+  isError?: boolean;
+};
+
 export type Result<T = unknown> = {
   isError: boolean;
   data?: T;

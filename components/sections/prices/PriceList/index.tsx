@@ -60,6 +60,8 @@ export const PriceList: FC<Props> = ({ productId }) => {
           divider={i < array.length - 1}
           secondaryAction={
             <Box sx={{ display: 'flex', gap: 1 }}>
+              <PriceActions action='favorite' price={price} />
+
               <PriceActions action='edit' price={price} />
 
               <PriceActions action='delete' price={price} />
