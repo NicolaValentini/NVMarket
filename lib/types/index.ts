@@ -1,4 +1,4 @@
-import { CartItem, Product, Supermarket, Tag } from './dao';
+import { CartItem, Price, Product, Supermarket, Tag } from './dao';
 
 export * from './dao';
 
@@ -17,6 +17,10 @@ export type TagErrors = Partial<Record<keyof Tag, string>> & {
 };
 
 export type ProductErrors = Partial<Record<keyof ProductWithTag, string>> & {
+  result?: string;
+};
+
+export type PriceErrors = Partial<Record<keyof Price, string>> & {
   result?: string;
 };
 
