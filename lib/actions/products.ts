@@ -8,13 +8,13 @@ import {
   deleteProduct,
   getProductById,
   getProductByName,
-  getProductsWithQuantity,
+  getProductsWithQuantityAndTags,
   getProductWithTagsById,
   updateProduct,
 } from '../db';
 
-export async function getProductsWithQuantityAction() {
-  const result = getProductsWithQuantity();
+export async function getProductsWithQuantityAndTagsAction() {
+  const result = getProductsWithQuantityAndTags();
 
   if (result.isError) {
     return errorResult('Something went wrong during products fetching', []);

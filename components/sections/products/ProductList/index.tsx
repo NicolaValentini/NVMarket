@@ -7,14 +7,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 
-import { getProductsWithQuantityAction } from '@/lib';
+import { getProductsWithQuantityAndTagsAction } from '@/lib';
 
 import { ErrorAlert } from '../../../feedback';
 import { EmptyState } from '../../../ui';
 import { ProductActions } from '../ProductActions';
 
 export const ProductList: FC = async () => {
-  const result = await getProductsWithQuantityAction();
+  const result = await getProductsWithQuantityAndTagsAction();
 
   if (result.isError) {
     return <ErrorAlert message={result.message} />;

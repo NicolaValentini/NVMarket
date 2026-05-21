@@ -4,6 +4,10 @@ export * from './dao';
 
 export type ProductWithQuantity = Product & Pick<CartItem, 'quantity'>;
 
+export type ProductWithQuantityAndTags = ProductWithQuantity & {
+  tags: Tag[];
+};
+
 export type ProductWithTag = Product & {
   tags: Tag[];
 };

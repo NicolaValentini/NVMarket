@@ -2,7 +2,12 @@ import 'server-only';
 
 import { getDb, getTagsByProductId } from '../../db';
 import { errorResult, successResult } from '../../utils';
-import { Product, ProductWithQuantity, ProductWithTag } from '../../types';
+import {
+  Product,
+  ProductWithQuantity,
+  ProductWithQuantityAndTags,
+  ProductWithTag,
+} from '../../types';
 
 export function getProductsWithQuantity() {
   try {
@@ -17,6 +22,27 @@ export function getProductsWithQuantity() {
   } catch (error) {
     console.error('Failed to fetch products', error);
     return errorResult<ProductWithQuantity[]>();
+  }
+}
+export function getProductsWithQuantityAndTags() {
+  try {
+    const result = getProductsWithQuantity();
+
+    if (result.isError) {
+      throw new Error('Failed to fetch products with quantity');
+    }
+
+    return successResult(
+      result.data?.map(
+        (product): ProductWithQuantityAndTags => ({
+          ...product,
+          tags: getTagsByProductId(product.id)?.data ?? [],
+        }),
+      ) ?? [],
+    );
+  } catch (error) {
+    console.error('Failed to fetch products', error);
+    return errorResult<ProductWithQuantityAndTags[]>();
   }
 }
 
