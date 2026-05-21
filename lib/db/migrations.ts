@@ -32,9 +32,9 @@ export function runMigrations(): void {
       id TEXT PRIMARY KEY,
       product_id TEXT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
       supermarket_id TEXT NOT NULL REFERENCES supermarkets(id) ON DELETE CASCADE,
-      brand TEXT,
+      name TEXT,
       price REAL NOT NULL,
-      updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+      yuka INTEGER NOT NULL DEFAULT 0,
       favorite BOOLEAN DEFAULT false
     );
 

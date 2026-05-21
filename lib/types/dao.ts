@@ -25,9 +25,9 @@ export type Price = {
   id: string;
   product_id: string;
   supermarket_id: string;
-  brand: string | null;
+  name: string | null;
   price: number;
-  updated_at: string;
+  yuka: number;
   favorite: boolean;
 };
 
