@@ -18,13 +18,13 @@ export const TagFormWithFetch: FC<Props> = async ({
   onCloseAction,
   onCloseRedirect,
 }) => {
-  const result = await getTagByIdAction(id);
+  const result = id ? await getTagByIdAction(id) : undefined;
 
-  return result.isError || !result.data ? (
-    <ErrorAlert message={result.message ?? 'No data found'} />
+  return id && (result?.isError || !result?.data) ? (
+    <ErrorAlert message={result?.message ?? 'No data found'} />
   ) : (
     <TagForm
-      tag={result.data}
+      tag={result?.data}
       onCloseBack={onCloseBack}
       onCloseAction={onCloseAction}
       onCloseRedirect={onCloseRedirect}

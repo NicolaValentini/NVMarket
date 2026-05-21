@@ -18,10 +18,10 @@ export const SupermarketDeleteWithFetch: FC<Props> = async ({
   onCloseAction,
   onCloseRedirect,
 }) => {
-  const result = await getSupermarketByIdAction(id);
+  const result = id ? await getSupermarketByIdAction(id) : undefined;
 
-  return result.isError || !result.data ? (
-    <ErrorAlert message={result.message ?? 'No data found'} />
+  return !id || result?.isError || !result?.data ? (
+    <ErrorAlert message={result?.message ?? 'No data found'} />
   ) : (
     <SupermarketDelete
       supermarket={result.data}

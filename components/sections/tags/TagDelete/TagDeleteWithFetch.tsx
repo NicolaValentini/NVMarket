@@ -18,10 +18,10 @@ export const TagDeleteWithFetch: FC<Props> = async ({
   onCloseAction,
   onCloseRedirect,
 }) => {
-  const result = await getTagByIdAction(id);
+  const result = id ? await getTagByIdAction(id) : undefined;
 
-  return result.isError || !result.data ? (
-    <ErrorAlert message={result.message ?? 'No data found'} />
+  return !id || result?.isError || !result?.data ? (
+    <ErrorAlert message={result?.message ?? 'No data found'} />
   ) : (
     <TagDelete
       tag={result.data}

@@ -25,8 +25,8 @@ export const ProductFormWithFetch: FC<Props> = async ({
   if (!result2.data) tagsError = 'No data found';
   if (result2.isError) tagsError = result2.message;
 
-  return result && (result.isError || !result.data) ? (
-    <ErrorAlert message={result.message ?? 'No data found'} />
+  return id && (result?.isError || !result?.data) ? (
+    <ErrorAlert message={result?.message ?? 'No data found'} />
   ) : (
     <ProductForm
       tags={result2.data ?? []}

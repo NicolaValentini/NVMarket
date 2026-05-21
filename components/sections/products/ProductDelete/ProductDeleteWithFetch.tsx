@@ -18,10 +18,10 @@ export const ProductDeleteWithFetch: FC<Props> = async ({
   onCloseAction,
   onCloseRedirect,
 }) => {
-  const result = await getProductByIdAction(id);
+  const result = id ? await getProductByIdAction(id) : undefined;
 
-  return result.isError || !result.data ? (
-    <ErrorAlert message={result.message ?? 'No data found'} />
+  return !id || result?.isError || !result?.data ? (
+    <ErrorAlert message={result?.message ?? 'No data found'} />
   ) : (
     <ProductDelete
       product={result.data}
