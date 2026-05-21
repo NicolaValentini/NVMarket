@@ -4,15 +4,17 @@ import { FC, useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { getPricesByProductIdAction, Price, Result } from '@/lib';
+import {
+  getPricesWithSupermarketByProductIdAction,
+  PriceWithSupermarket,
+  Result,
+} from '@/lib';
 
 import { ErrorAlert } from '../../../feedback';
-import { SmallEmptyState } from '../../../ui';
+import { ColoredListItem, SmallEmptyState } from '../../../ui';
 import { PriceActions } from '../PriceActions';
 
 type Props = {
@@ -21,10 +23,12 @@ type Props = {
 
 export const PriceList: FC<Props> = ({ productId }) => {
   const [isLoading, setLoading] = useState(true);
-  const [result, setResult] = useState<Result<Price[]>>({ isError: false });
+  const [result, setResult] = useState<Result<PriceWithSupermarket[]>>({
+    isError: false,
+  });
 
   useEffect(() => {
-    getPricesByProductIdAction(productId)
+    getPricesWithSupermarketByProductIdAction(productId)
       .then(setResult)
       .finally(() => setLoading(false));
   }, [productId]);
@@ -54,10 +58,18 @@ export const PriceList: FC<Props> = ({ productId }) => {
   return (
     <List disablePadding>
       {result.data.map((price, i, array) => (
-        <ListItem
+        <ColoredListItem
           key={price.id}
-          sx={{ paddingLeft: 8 }}
+          item={{
+            id: price.id,
+            name: price.supermarketName,
+            color: price.supermarketColor,
+          }}
+          sx={{ paddingLeft: 10 }}
           divider={i < array.length - 1}
+          primary={[price.name, price.price, price.yuka]
+            .filter(Boolean)
+            .join(' - ')}
           secondaryAction={
             <Box sx={{ display: 'flex', gap: 1 }}>
               <PriceActions action='favorite' price={price} />
@@ -67,11 +79,7 @@ export const PriceList: FC<Props> = ({ productId }) => {
               <PriceActions action='delete' price={price} />
             </Box>
           }
-        >
-          <ListItemText>
-            {price.name} {price.price}
-          </ListItemText>
-        </ListItem>
+        />
       ))}
     </List>
   );

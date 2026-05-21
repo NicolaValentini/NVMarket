@@ -3,6 +3,8 @@
 import { ChangeEvent, FC, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import List from '@mui/material/List';
+import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -19,8 +21,8 @@ import {
   updatePriceAction,
 } from '@/lib';
 
-import { SupermarketSelect } from '../../../ui';
 import { ErrorAlert } from '../../../feedback';
+import { ColoredListItem, SupermarketSelect } from '../../../ui';
 
 type Props = (
   | {
@@ -178,6 +180,23 @@ export const PriceForm: FC<Props> = ({
             setYuka(value);
           }}
         />
+
+        <Paper variant='outlined' sx={{ overflow: 'hidden' }}>
+          <List disablePadding>
+            <ColoredListItem
+              sx={{ paddingLeft: 10 }}
+              primary={[name?.trim()?.toUpperCase() || 'PREVIEW', price, yuka]
+                .filter(Boolean)
+                .join(' - ')}
+              item={
+                selectedSupermarket
+                  ? JSON.parse(selectedSupermarket)
+                  : undefined
+              }
+            />
+          </List>
+        </Paper>
+
         <ErrorAlert message={errors.result} />
       </DialogContent>
 

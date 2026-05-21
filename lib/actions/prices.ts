@@ -9,19 +9,19 @@ import {
   deletePrice,
   getPriceById,
   getPriceByNameAndProductAndSupermarket,
-  getPricesByProductId,
+  getPricesWithSupermarketByProductId,
   setFavoritePrice,
   updatePrice,
 } from '../db';
 
-export async function getPricesByProductIdAction(id: string) {
+export async function getPricesWithSupermarketByProductIdAction(id: string) {
   const errors = validateId(id);
 
   if (Object.keys(errors).length) {
     return errorResult('Missing id', []);
   }
 
-  const result = getPricesByProductId(id);
+  const result = getPricesWithSupermarketByProductId(id);
 
   if (result.isError) {
     return errorResult('Something went wrong during prices fetching', []);

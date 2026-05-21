@@ -1,19 +1,22 @@
 import 'server-only';
 
 import { getDb } from '../../db';
-import { Price } from '../../types';
+import { Price, PriceWithSupermarket } from '../../types';
 import { errorResult, successResult } from '../../utils';
 
-export function getPricesByProductId(id: string) {
+export function getPricesWithSupermarketByProductId(id: string) {
   try {
     return successResult(
       getDb()
-        .prepare<[string], Price>('SELECT * FROM prices WHERE product_id = ?')
+        .prepare<
+          [string],
+          PriceWithSupermarket
+        >('SELECT p.*, s.name AS supermarketName, s.color AS supermarketColor FROM prices p LEFT JOIN supermarkets s ON p.supermarket_id = s.id WHERE product_id = ? ORDER BY p.name ASC')
         .all(id),
     );
   } catch (error) {
     console.error('Failed to fetch prices', error);
-    return errorResult<Price[]>();
+    return errorResult<PriceWithSupermarket[]>();
   }
 }
 

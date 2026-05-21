@@ -2,6 +2,11 @@ import { CartItem, Price, Product, Supermarket, Tag } from './dao';
 
 export * from './dao';
 
+export type PriceWithSupermarket = Price & {
+  supermarketName: string;
+  supermarketColor: string;
+};
+
 export type ProductWithQuantity = Product & Pick<CartItem, 'quantity'>;
 
 export type ProductWithQuantityAndTags = ProductWithQuantity & {
