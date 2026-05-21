@@ -1,0 +1,195 @@
+'use client';
+
+import { ChangeEvent, FC, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import CircularProgress from '@mui/material/CircularProgress';
+
+import {
+  createPriceAction,
+  Price,
+  PriceErrors,
+  Product,
+  Supermarket,
+  updatePriceAction,
+} from '@/lib';
+
+import { SupermarketSelect } from '../../../ui';
+import { ErrorAlert } from '../../../feedback';
+
+type Props = (
+  | {
+      product: Product;
+      price?: undefined;
+    }
+  | {
+      product?: undefined;
+      price: Price;
+    }
+) & {
+  supermarkets: Supermarket[];
+  supermarketsError?: string | undefined;
+  onCloseBack?: boolean | undefined;
+  onCloseRedirect?: string | undefined;
+  onCloseAction?: (() => void) | undefined;
+};
+
+export const PriceForm: FC<Props> = ({
+  supermarkets,
+  supermarketsError,
+  product,
+  price: priceProps,
+  onCloseBack,
+  onCloseAction,
+  onCloseRedirect,
+}) => {
+  const router = useRouter();
+
+  const isEdit = !!priceProps?.id;
+  const supermarket = supermarkets.find(
+    supermarket => supermarket.id === priceProps?.supermarket_id,
+  );
+
+  const handleClose = () => {
+    if (onCloseAction) onCloseAction();
+    else if (onCloseBack) router.back();
+    else if (onCloseRedirect) router.push(onCloseRedirect);
+  };
+
+  const [name, setName] = useState(priceProps?.name ?? '');
+  const [price, setPrice] = useState(priceProps?.price?.toString() ?? '');
+  const [yuka, setYuka] = useState(priceProps?.yuka?.toString() ?? '');
+  const [selectedSupermarket, setSupermarket] = useState(
+    supermarket ? JSON.stringify(supermarket) : '',
+  );
+
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<PriceErrors>({});
+
+  const formAction = async (formData: FormData) => {
+    if (loading) return;
+    if (Object.keys(errors).length) setErrors({});
+    setLoading(true);
+
+    const _errors = isEdit
+      ? await updatePriceAction(formData)
+      : await createPriceAction(formData);
+
+    if (Object.keys(_errors).length) setErrors(_errors);
+    else handleClose();
+
+    setLoading(false);
+  };
+
+  return (
+    <form action={formAction}>
+      {isEdit && <input type='hidden' name='id' value={priceProps.id} />}
+      <input
+        type='hidden'
+        name='product'
+        value={product?.id || priceProps?.product_id}
+      />
+
+      <DialogTitle>{isEdit ? 'Edit Price' : 'New Price'}</DialogTitle>
+
+      <DialogContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3,
+          pt: '8px !important',
+        }}
+      >
+        <TextField
+          id='name'
+          autoFocus
+          fullWidth
+          name='name'
+          label='Name'
+          value={name}
+          disabled={loading}
+          error={!!errors.name}
+          helperText={errors.name}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            setName(event.target.value);
+          }}
+        />
+
+        <TextField
+          id='price'
+          autoFocus
+          fullWidth
+          name='price'
+          label='Price'
+          value={price}
+          disabled={loading}
+          error={!!errors.price}
+          helperText={errors.price}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            let value = event.target.value ?? '';
+            value = value.replaceAll(',', '.');
+            setErrors(prev => {
+              const copy = { ...prev };
+              const message = 'Value not allowed';
+
+              if (!/^\d+(\.\d{0,2})?$/.test(value)) copy.price = message;
+              else if (copy.price === message) delete copy.price;
+
+              return copy;
+            });
+            setPrice(value);
+          }}
+        />
+
+        <SupermarketSelect
+          supermarkets={supermarkets}
+          selectedSupermarket={selectedSupermarket}
+          setSupermarket={setSupermarket}
+          disabled={loading}
+          error={supermarketsError ?? errors.supermarket_id}
+        />
+
+        <TextField
+          id='yuka'
+          autoFocus
+          fullWidth
+          name='yuka'
+          label='Yuka'
+          value={yuka}
+          disabled={loading}
+          error={!!errors.yuka}
+          helperText={errors.yuka}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            const value = event.target.value ?? '';
+            setErrors(prev => {
+              const copy = { ...prev };
+              const message = 'Value not allowed';
+
+              if (!/^\d{1,2}$/.test(value)) copy.yuka = message;
+              else if (copy.yuka === message) delete copy.yuka;
+
+              return copy;
+            });
+            setYuka(value);
+          }}
+        />
+        <ErrorAlert message={errors.result} />
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={handleClose} disabled={loading}>
+          Cancel
+        </Button>
+
+        <Button type='submit' disabled={loading} variant='contained'>
+          {loading ? <CircularProgress size={20} /> : 'Save'}
+        </Button>
+      </DialogActions>
+    </form>
+  );
+};
