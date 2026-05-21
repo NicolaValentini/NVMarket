@@ -3,6 +3,7 @@
 import { FC, Fragment, useState } from 'react';
 
 import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
 import ListItem from '@mui/material/ListItem';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -12,6 +13,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import { ProductWithQuantityAndTags } from '@/lib';
 
 import { TagChip } from '../../../ui';
+import { PriceActions, PriceList } from '../../prices';
 import { ProductActions } from '../ProductActions';
 
 type Props = {
@@ -29,6 +31,8 @@ export const ProductListItem: FC<Props> = ({ product, divider }) => {
         secondaryAction={
           <Box sx={{ display: 'flex', gap: 1 }}>
             <ProductActions action='buy' product={product} />
+
+            <PriceActions action='create' productId={product.id} />
 
             <ProductActions action='edit' product={product} />
 
@@ -63,6 +67,10 @@ export const ProductListItem: FC<Props> = ({ product, divider }) => {
           {product.name}
         </ListItemText>
       </ListItem>
+
+      <Collapse in={open} timeout='auto' unmountOnExit>
+        <PriceList productId={product.id} />
+      </Collapse>
     </Fragment>
   );
 };
