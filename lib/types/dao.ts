@@ -25,7 +25,7 @@ export type Price = {
   id: string;
   product_id: string;
   supermarket_id: string;
-  name: string | null;
+  name: string;
   price: number;
   yuka: number;
   favorite: boolean;

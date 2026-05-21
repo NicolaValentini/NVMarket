@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { validateProduct } from '../utils';
+import { errorResult, validateId, validateProduct } from '../utils';
 import {
   createProduct,
   deleteProduct,
@@ -17,30 +17,45 @@ export async function getProductsWithQuantityAction() {
   const result = getProductsWithQuantity();
 
   if (result.isError) {
-    result.message = 'Something went wrong during products fetching';
-    return result;
+    return errorResult('Something went wrong during products fetching', []);
   }
 
   return result;
 }
 
 export async function getProductByIdAction(id: string) {
+  const errors = validateId(id);
+
+  if (Object.keys(errors).length) {
+    return errorResult('Missing id', undefined);
+  }
+
   const result = getProductById(id);
 
   if (result.isError) {
-    result.message = 'Something went wrong during product fetching';
-    return result;
+    return errorResult(
+      'Something went wrong during product fetching',
+      undefined,
+    );
   }
 
   return result;
 }
 
 export async function getProductWithTagsByIdAction(id: string) {
+  const errors = validateId(id);
+
+  if (Object.keys(errors).length) {
+    return errorResult('Missing id', undefined);
+  }
+
   const result = getProductWithTagsById(id);
 
   if (result.isError) {
-    result.message = 'Something went wrong during product fetching';
-    return result;
+    return errorResult(
+      'Something went wrong during product fetching',
+      undefined,
+    );
   }
 
   return result;
@@ -50,7 +65,7 @@ export async function createProductAction(formData: FormData) {
   const name = formData.get('name') as string;
   const tags = (formData.get('tags') as string)?.split(',')?.filter(Boolean);
 
-  const errors = validateProduct(name, tags);
+  const errors = validateProduct({ name, tags });
 
   if (Object.keys(errors).length) return errors;
 
@@ -82,7 +97,11 @@ export async function updateProductAction(formData: FormData) {
   const id = formData.get('id') as string;
   const name = formData.get('name') as string;
   const tags = (formData.get('tags') as string)?.split(',')?.filter(Boolean);
-  const errors = validateProduct(name, tags);
+
+  const errors = {
+    ...validateId(id),
+    ...validateProduct({ name, tags }),
+  };
 
   if (Object.keys(errors).length) return errors;
 
@@ -111,11 +130,16 @@ export async function updateProductAction(formData: FormData) {
 }
 
 export async function deleteProductAction(id: string) {
+  const errors = validateId(id);
+
+  if (Object.keys(errors).length) {
+    return errorResult('Missing id');
+  }
+
   const result = deleteProduct(id);
 
   if (result.isError) {
-    result.message = 'Something went wrong during product deleting';
-    return result;
+    return errorResult('Something went wrong during product deleting');
   }
 
   revalidatePath('/[locale]/products', 'page');

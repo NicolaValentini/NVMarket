@@ -1,45 +1,67 @@
 import {
+  IdErrors,
+  Price,
   PriceErrors,
+  Product,
   ProductErrors,
   Result,
+  Supermarket,
   SupermarketErrors,
+  Tag,
   TagErrors,
 } from '../types';
 
-export const validateSupermarket = (name: string, color: string) => {
+export const validateId = (id: string) => {
+  const errors: IdErrors = {};
+
+  if (!id.trim()) errors.id = 'Field required';
+
+  return errors;
+};
+
+export const validateSupermarket = ({
+  name,
+  color,
+}: Omit<Supermarket, 'id'>) => {
   const errors: SupermarketErrors = {};
 
-  if (!name) errors.name = 'Field required';
-  if (!color) errors.color = 'Field required';
+  if (!name.trim()) errors.name = 'Field required';
+  if (!color.trim()) errors.color = 'Field required';
 
   return errors;
 };
 
-export const validateTag = (name: string, color: string) => {
+export const validateTag = ({ name, color }: Omit<Tag, 'id'>) => {
   const errors: TagErrors = {};
 
-  if (!name) errors.name = 'Field required';
-  if (!color) errors.color = 'Field required';
+  if (!name.trim()) errors.name = 'Field required';
+  if (!color.trim()) errors.color = 'Field required';
 
   return errors;
 };
 
-export const validateProduct = (name: string, tags: string[]) => {
+export const validateProduct = ({
+  name,
+  tags,
+}: Omit<Product, 'id'> & { tags: string[] }) => {
   const errors: ProductErrors = {};
 
-  if (!name) errors.name = 'Field required';
-  if (!tags.length) errors.tags = 'Field required';
+  if (!name.trim()) errors.name = 'Field required';
+  if (!tags.filter(Boolean).length) errors.tags = 'Field required';
 
   return errors;
 };
 
-export const validatePrice = (
-  name: string,
-  price: string | number,
-  yuka: string | number,
-  product_id: string,
-  supermarket_id: string,
-) => {
+export const validatePrice = ({
+  name,
+  price,
+  yuka,
+  product_id,
+  supermarket_id,
+}: Omit<Price, 'id' | 'price' | 'yuka' | 'favorite'> & {
+  price?: string;
+  yuka?: string;
+}) => {
   const errors: PriceErrors = {};
 
   if (!name.trim()) errors.name = 'Field required';
@@ -52,7 +74,7 @@ export const validatePrice = (
   return errors;
 };
 
-export const errorResult = <T = unknown>(data?: T, message?: string) =>
+export const errorResult = <T = unknown>(message?: string, data?: T) =>
   ({ isError: true, data, message }) as Result<T>;
 export const successResult = <T = unknown>(data?: T, message?: string) =>
   ({ isError: false, data, message }) as Result<T>;

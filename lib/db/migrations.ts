@@ -7,7 +7,7 @@ export function runMigrations(): void {
   db.exec(`
     CREATE TABLE IF NOT EXISTS products (
       id TEXT PRIMARY KEY,
-      name TEXT NOT NULL
+      name TEXT NOT NULL UNIQUE
     );
 
     CREATE TABLE IF NOT EXISTS tags (
@@ -32,7 +32,7 @@ export function runMigrations(): void {
       id TEXT PRIMARY KEY,
       product_id TEXT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
       supermarket_id TEXT NOT NULL REFERENCES supermarkets(id) ON DELETE CASCADE,
-      name TEXT,
+      name TEXT NOT NULL,
       price REAL NOT NULL,
       yuka INTEGER NOT NULL DEFAULT 0,
       favorite BOOLEAN DEFAULT false

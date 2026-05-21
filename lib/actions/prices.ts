@@ -1,8 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-
-import { validatePrice } from '../utils';
+import { errorResult, validateId, validatePrice } from '../utils';
 import {
   createPrice,
   deletePrice,
@@ -13,42 +12,58 @@ import {
 } from '../db';
 
 export async function getPricesByProductIdAction(id: string) {
+  const errors = validateId(id);
+
+  if (Object.keys(errors).length) {
+    return errorResult('Missing id', []);
+  }
+
   const result = getPricesByProductId(id);
 
   if (result.isError) {
-    result.message = 'Something went wrong during prices fetching';
-    return result;
+    return errorResult('Something went wrong during prices fetching', []);
   }
 
   return result;
 }
 
 export async function getPriceByIdAction(id: string) {
+  const errors = validateId(id);
+
+  if (Object.keys(errors).length) {
+    return errorResult('Missing id', undefined);
+  }
+
   const result = getPriceById(id);
 
   if (result.isError) {
-    result.message = 'Something went wrong during price fetching';
-    return result;
+    return errorResult('Something went wrong during price fetching', undefined);
   }
 
   return result;
 }
 
 export async function createPriceAction(formData: FormData) {
-  const productId = formData.get('product') as string;
-  const supermarketId = formData.get('supermarket') as string;
+  const product_id = formData.get('product') as string;
+  const supermarket_id = formData.get('supermarket') as string;
   const name = formData.get('name') as string;
   const price = formData.get('price') as string;
   const yuka = formData.get('yuka') as string;
 
-  const errors = validatePrice(name, price, yuka, productId, supermarketId);
+  const errors = validatePrice({
+    name,
+    price,
+    yuka,
+    product_id,
+    supermarket_id,
+  });
 
   if (Object.keys(errors).length) return errors;
 
   const duplicated = getPriceByNameAndProductAndSupermarket(
     name,
-    productId,
-    supermarketId,
+    product_id,
+    supermarket_id,
   );
 
   if (duplicated.isError) {
@@ -63,8 +78,8 @@ export async function createPriceAction(formData: FormData) {
   }
 
   const result = createPrice(
-    productId,
-    supermarketId,
+    product_id,
+    supermarket_id,
     name,
     Number(price),
     yuka ? Number(yuka) : 0,
@@ -82,20 +97,23 @@ export async function createPriceAction(formData: FormData) {
 
 export async function updatePriceAction(formData: FormData) {
   const id = formData.get('id') as string;
-  const productId = formData.get('product') as string;
-  const supermarketId = formData.get('supermarket') as string;
+  const product_id = formData.get('product') as string;
+  const supermarket_id = formData.get('supermarket') as string;
   const name = formData.get('name') as string;
   const price = formData.get('price') as string;
   const yuka = formData.get('yuka') as string;
 
-  const errors = validatePrice(name, price, yuka, productId, supermarketId);
+  const errors = {
+    ...validateId(id),
+    ...validatePrice({ name, price, yuka, product_id, supermarket_id }),
+  };
 
   if (Object.keys(errors).length) return errors;
 
   const duplicated = getPriceByNameAndProductAndSupermarket(
     name,
-    productId,
-    supermarketId,
+    product_id,
+    supermarket_id,
   );
 
   if (duplicated.isError) {
@@ -111,8 +129,8 @@ export async function updatePriceAction(formData: FormData) {
 
   const result = updatePrice(
     id,
-    productId,
-    supermarketId,
+    product_id,
+    supermarket_id,
     name,
     Number(price),
     yuka ? Number(yuka) : 0,
@@ -129,11 +147,16 @@ export async function updatePriceAction(formData: FormData) {
 }
 
 export async function deletePriceAction(id: string) {
+  const errors = validateId(id);
+
+  if (Object.keys(errors).length) {
+    return errorResult('Missing id');
+  }
+
   const result = deletePrice(id);
 
   if (result.isError) {
-    result.message = 'Something went wrong during price deleting';
-    return result;
+    return errorResult('Something went wrong during price deleting');
   }
 
   revalidatePath('/[locale]/products', 'page');

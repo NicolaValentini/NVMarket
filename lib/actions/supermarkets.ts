@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { validateSupermarket } from '../utils';
+import { errorResult, validateId, validateSupermarket } from '../utils';
 import {
   createSupermarket,
   deleteSupermarket,
@@ -16,19 +16,26 @@ export async function getSupermarketsAction() {
   const result = getSupermarkets();
 
   if (result.isError) {
-    result.message = 'Something went wrong during supermarkets fetching';
-    return result;
+    return errorResult('Something went wrong during supermarkets fetching', []);
   }
 
   return result;
 }
 
 export async function getSupermarketByIdAction(id: string) {
+  const errors = validateId(id);
+
+  if (Object.keys(errors).length) {
+    return errorResult('Missing id', undefined);
+  }
+
   const result = getSupermarketById(id);
 
   if (result.isError) {
-    result.message = 'Something went wrong during supermarket fetching';
-    return result;
+    return errorResult(
+      'Something went wrong during supermarket fetching',
+      undefined,
+    );
   }
 
   return result;
@@ -37,7 +44,8 @@ export async function getSupermarketByIdAction(id: string) {
 export async function createSupermarketAction(formData: FormData) {
   const name = formData.get('name') as string;
   const color = formData.get('color') as string;
-  const errors = validateSupermarket(name, color);
+
+  const errors = validateSupermarket({ name, color });
 
   if (Object.keys(errors).length) return errors;
 
@@ -69,7 +77,11 @@ export async function updateSupermarketAction(formData: FormData) {
   const id = formData.get('id') as string;
   const name = formData.get('name') as string;
   const color = formData.get('color') as string;
-  const errors = validateSupermarket(name, color);
+
+  const errors = {
+    ...validateId(id),
+    ...validateSupermarket({ name, color }),
+  };
 
   if (Object.keys(errors).length) return errors;
 
@@ -98,11 +110,16 @@ export async function updateSupermarketAction(formData: FormData) {
 }
 
 export async function deleteSupermarketAction(id: string) {
+  const errors = validateId(id);
+
+  if (Object.keys(errors).length) {
+    return errorResult('Missing id');
+  }
+
   const result = deleteSupermarket(id);
 
   if (result.isError) {
-    result.message = 'Something went wrong during supermarket deleting';
-    return result;
+    return errorResult('Something went wrong during supermarket deleting');
   }
 
   revalidatePath('/[locale]/supermarkets', 'page');

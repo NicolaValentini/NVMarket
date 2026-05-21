@@ -8,6 +8,10 @@ export type ProductWithTag = Product & {
   tags: Tag[];
 };
 
+export type IdErrors = Partial<{
+  id: string;
+}>;
+
 export type SupermarketErrors = Partial<Record<keyof Supermarket, string>> & {
   result?: string;
 };

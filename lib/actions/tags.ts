@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { validateTag } from '../utils';
+import { errorResult, validateId, validateTag } from '../utils';
 import {
   checkTagUsageById,
   createTag,
@@ -17,19 +17,23 @@ export async function getTagsAction() {
   const result = getTags();
 
   if (result.isError) {
-    result.message = 'Something went wrong during tags fetching';
-    return result;
+    return errorResult('Something went wrong during tags fetching', []);
   }
 
   return result;
 }
 
 export async function getTagByIdAction(id: string) {
+  const errors = validateId(id);
+
+  if (Object.keys(errors).length) {
+    return errorResult('Missing id', undefined);
+  }
+
   const result = getTagById(id);
 
   if (result.isError) {
-    result.message = 'Something went wrong during tag fetching';
-    return result;
+    return errorResult('Something went wrong during tag fetching', undefined);
   }
 
   return result;
@@ -38,7 +42,8 @@ export async function getTagByIdAction(id: string) {
 export async function createTagAction(formData: FormData) {
   const name = formData.get('name') as string;
   const color = formData.get('color') as string;
-  const errors = validateTag(name, color);
+
+  const errors = validateTag({ name, color });
 
   if (Object.keys(errors).length) return errors;
 
@@ -70,7 +75,11 @@ export async function updateTagAction(formData: FormData) {
   const id = formData.get('id') as string;
   const name = formData.get('name') as string;
   const color = formData.get('color') as string;
-  const errors = validateTag(name, color);
+
+  const errors = {
+    ...validateId(id),
+    ...validateTag({ name, color }),
+  };
 
   if (Object.keys(errors).length) return errors;
 
@@ -99,24 +108,26 @@ export async function updateTagAction(formData: FormData) {
 }
 
 export async function deleteTagAction(id: string) {
+  const errors = validateId(id);
+
+  if (Object.keys(errors).length) {
+    return errorResult('Missing id');
+  }
+
   const result1 = checkTagUsageById(id);
 
   if (result1.isError) {
-    result1.message = 'Something went wrong during validation';
-    return result1;
+    return errorResult('Something went wrong during validation');
   }
 
   if (result1.data?.length) {
-    result1.isError = true;
-    result1.message = 'Tag with products associated';
-    return result1;
+    return errorResult('Tag with products associated');
   }
 
   const result = deleteTag(id);
 
   if (result.isError) {
-    result.message = 'Something went wrong during tag deleting';
-    return result;
+    return errorResult('Something went wrong during tag deleting');
   }
 
   revalidatePath('/[locale]/tags', 'page');

@@ -62,8 +62,7 @@ export function increaseCartItem(productId: string) {
     const result = getCartItemByProductId(productId);
 
     if (result.isError) {
-      result.message = 'Something went wrong during validation';
-      return result;
+      throw new Error('Failed to fetch cart item by product');
     }
 
     if (result.data) {
@@ -88,8 +87,7 @@ export function decreaseCartItem(productId: string) {
     const result = getCartItemByProductId(productId);
 
     if (result.isError) {
-      result.message = 'Something went wrong during validation';
-      return result;
+      throw new Error('Failed to fetch cart item by product');
     }
 
     if (result.data && result.data.quantity > 1) {
