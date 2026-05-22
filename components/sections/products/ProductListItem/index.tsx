@@ -61,10 +61,10 @@ export const ProductListItem: FC<Props> = ({ product, divider }) => {
           }}
           onClick={() => setOpen(!open)}
         >
+          {product.name}
           {product.tags.map(tag => (
             <TagChip key={tag.id} tag={tag} />
           ))}
-          {product.name}
         </ListItemText>
       </ListItem>
 

@@ -9,8 +9,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { ProductWithQuantity } from '@/lib';
 import { I18nContext } from '@/context';
+import { ProductWithQuantity } from '@/lib';
 
 import { QuantityInput } from '../../../ui';
 

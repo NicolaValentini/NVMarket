@@ -46,7 +46,7 @@ export function getTagsByProductId(id: string) {
         .prepare<
           [string],
           Tag
-        >('SELECT t.* FROM tags t JOIN product_tags pt ON pt.tag_id = t.id WHERE pt.product_id = ?')
+        >('SELECT t.* FROM tags t JOIN product_tags pt ON pt.tag_id = t.id WHERE pt.product_id = ? ORDER BY name ASC')
         .all(id),
     );
   } catch (error) {

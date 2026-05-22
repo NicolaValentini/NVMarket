@@ -22,8 +22,8 @@ import {
   updateProductAction,
 } from '@/lib';
 
-import { TagSelect } from '../../../ui';
 import { ErrorAlert } from '../../../feedback';
+import { TagChip, TagSelect } from '../../../ui';
 
 type Props = {
   tags: Tag[];
@@ -115,8 +115,21 @@ export const ProductForm: FC<Props> = ({
         <Paper variant='outlined'>
           <List disablePadding>
             <ListItem>
-              <ListItemText>
+              <ListItemText
+                slotProps={{
+                  primary: {
+                    sx: {
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: 0.5,
+                    },
+                  },
+                }}
+              >
                 {name?.trim()?.toUpperCase() || 'PREVIEW'}
+                {selectedTags.map(tag => (
+                  <TagChip key={tag} tag={JSON.parse(tag)} />
+                ))}
               </ListItemText>
             </ListItem>
           </List>
