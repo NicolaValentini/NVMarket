@@ -1,11 +1,9 @@
-import { LoadingSuspense, ProductForm, RouterDialog } from '@/components';
+import { LoadingSuspense, ProductUpsert } from '@/components';
 
 export default function ProductCreatePage() {
   return (
-    <RouterDialog open onCloseRedirect='./'>
-      <LoadingSuspense>
-        <ProductForm.WithFetch onCloseRedirect='./' />
-      </LoadingSuspense>
-    </RouterDialog>
+    <LoadingSuspense>
+      <ProductUpsert onCloseRedirect='./' />
+    </LoadingSuspense>
   );
 }

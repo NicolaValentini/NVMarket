@@ -1,11 +1,9 @@
-import { LoadingSuspense, ProductForm, RouterDialog } from '@/components';
+import { LoadingSuspense, ProductUpsert } from '@/components';
 
 export default function ProductCreateModal() {
   return (
-    <RouterDialog key='create-product' open onCloseBack>
-      <LoadingSuspense>
-        <ProductForm.WithFetch onCloseBack />
-      </LoadingSuspense>
-    </RouterDialog>
+    <LoadingSuspense>
+      <ProductUpsert onCloseBack />
+    </LoadingSuspense>
   );
 }
