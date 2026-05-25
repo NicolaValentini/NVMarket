@@ -1,9 +1,9 @@
-import { RouterDialog, TagForm } from '@/components';
+import { LoadingSuspense, TagUpsert } from '@/components';
 
 export default function TagCreateModal() {
   return (
-    <RouterDialog key='create-tag' open onCloseBack>
-      <TagForm onCloseBack />
-    </RouterDialog>
+    <LoadingSuspense>
+      <TagUpsert onCloseBack />
+    </LoadingSuspense>
   );
 }

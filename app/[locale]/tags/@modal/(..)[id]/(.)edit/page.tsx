@@ -1,4 +1,4 @@
-import { LoadingSuspense, RouterDialog, TagForm } from '@/components';
+import { LoadingSuspense, TagUpsert } from '@/components';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -8,10 +8,8 @@ export default async function TagEditModal({ params }: Props) {
   const { id } = await params;
 
   return (
-    <RouterDialog key='edit-tag' open onCloseBack>
-      <LoadingSuspense>
-        <TagForm.WithFetch id={id} onCloseBack />
-      </LoadingSuspense>
-    </RouterDialog>
+    <LoadingSuspense>
+      <TagUpsert id={id} onCloseBack />
+    </LoadingSuspense>
   );
 }

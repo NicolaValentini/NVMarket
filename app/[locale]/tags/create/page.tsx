@@ -1,9 +1,9 @@
-import { RouterDialog, TagForm } from '@/components';
+import { LoadingSuspense, TagUpsert } from '@/components';
 
 export default function TagCreatePage() {
   return (
-    <RouterDialog open onCloseRedirect='./'>
-      <TagForm onCloseRedirect='./' />
-    </RouterDialog>
+    <LoadingSuspense>
+      <TagUpsert onCloseRedirect='./' />
+    </LoadingSuspense>
   );
 }

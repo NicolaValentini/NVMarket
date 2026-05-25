@@ -1,6 +1,141 @@
-import { TagFormWithFetch } from './TagFormWithFetch';
-import { TagForm as TagFormBase } from './TagForm';
+'use client';
 
-export const TagForm = Object.assign(TagFormBase, {
-  WithFetch: TagFormWithFetch,
-});
+import { ChangeEvent, FC, useState, useTransition } from 'react';
+
+import List from '@mui/material/List';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import ListItem from '@mui/material/ListItem';
+import TextField from '@mui/material/TextField';
+import DialogTitle from '@mui/material/DialogTitle';
+import ListItemText from '@mui/material/ListItemText';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import CircularProgress from '@mui/material/CircularProgress';
+
+import {
+  COLORS,
+  createTagAction,
+  Tag,
+  TagErrors,
+  updateTagAction,
+} from '@/lib';
+
+import { ErrorAlert } from '../../../feedback';
+import {
+  ColorInput,
+  RouterDialog,
+  RouterDialogOnCloseProps,
+  TagChip,
+} from '../../../ui';
+
+type Props = RouterDialogOnCloseProps & {
+  tag?: Tag | undefined;
+};
+
+export const TagForm: FC<Props> = ({
+  tag,
+  onCloseBack,
+  onCloseAction,
+  onCloseRedirect,
+}) => {
+  const isEdit = !!tag?.id;
+
+  const [name, setName] = useState(tag?.name ?? '');
+  const [color, setColor] = useState(tag?.color ?? COLORS[0]!);
+
+  const [loading, startTransition] = useTransition();
+  const [errors, setErrors] = useState<TagErrors>({});
+
+  const getFormAction =
+    (handleClose: () => void) => async (formData: FormData) => {
+      if (loading) return;
+      if (Object.keys(errors).length) setErrors({});
+
+      startTransition(async () => {
+        const _errors = isEdit
+          ? await updateTagAction(formData)
+          : await createTagAction(formData);
+
+        if (Object.keys(_errors).length) setErrors(_errors);
+        else handleClose();
+      });
+    };
+
+  return (
+    <RouterDialog
+      open
+      onCloseBack={!loading ? onCloseBack : undefined}
+      onCloseAction={!loading ? onCloseAction : undefined}
+      onCloseRedirect={!loading ? onCloseRedirect : undefined}
+      childrenAction={handleClose => (
+        <form action={getFormAction(handleClose)}>
+          {isEdit && <input type='hidden' name='id' value={tag.id} />}
+
+          <DialogTitle>{isEdit ? 'Edit Tag' : 'New Tag'}</DialogTitle>
+
+          <DialogContent
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 3,
+              pt: '8px !important',
+            }}
+          >
+            <TextField
+              id='name'
+              autoFocus
+              fullWidth
+              name='name'
+              label='Name'
+              value={name}
+              disabled={loading}
+              error={!!errors.name}
+              helperText={errors.name}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                setName(event.target.value);
+              }}
+            />
+
+            <ColorInput
+              disabled={loading}
+              selectedColor={color}
+              setColor={setColor}
+              error={errors.color}
+            />
+
+            <Paper variant='outlined'>
+              <List disablePadding>
+                <ListItem>
+                  <ListItemText
+                    primary={
+                      <TagChip
+                        tag={{
+                          id: '',
+                          name: name?.trim()?.toUpperCase() || 'PREVIEW',
+                          color,
+                        }}
+                      />
+                    }
+                  />
+                </ListItem>
+              </List>
+            </Paper>
+
+            <ErrorAlert message={errors.result} />
+          </DialogContent>
+
+          <DialogActions>
+            <Button onClick={handleClose} disabled={loading}>
+              Cancel
+            </Button>
+
+            <Button type='submit' disabled={loading} variant='contained'>
+              {loading ? <CircularProgress size={20} /> : 'Save'}
+            </Button>
+          </DialogActions>
+        </form>
+      )}
+    />
+  );
+};
