@@ -72,7 +72,7 @@ export const TagSelect: FC<Props> = ({
       <input
         type='hidden'
         name='tags'
-        value={selectedTags.map(tag => JSON.parse(tag)?.id)}
+        value={selectedTags.map(tag => JSON.parse(tag).id)}
       />
     </FormControl>
   );

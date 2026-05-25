@@ -1,6 +1,7 @@
 'use client';
 
 import { FC, ReactNode, useState, useMemo } from 'react';
+
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 

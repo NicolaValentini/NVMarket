@@ -69,7 +69,7 @@ export const SupermarketSelect: FC<Props> = ({
       <input
         type='hidden'
         name='supermarket'
-        value={selectedSupermarket ? JSON.parse(selectedSupermarket)?.id : ''}
+        value={selectedSupermarket ? JSON.parse(selectedSupermarket).id : ''}
       />
     </FormControl>
   );

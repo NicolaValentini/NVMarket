@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useServerInsertedHTML } from 'next/navigation';
+
 import type {
   EmotionCache,
   Options as OptionsOfCreateCache,
@@ -11,7 +12,7 @@ import { CacheProvider } from '@emotion/react';
 
 type Props = {
   options: OptionsOfCreateCache;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export function EmotionRegistry({ options, children }: Props) {

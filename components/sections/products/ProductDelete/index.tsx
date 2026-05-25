@@ -9,13 +9,11 @@ import {
   getProductByIdAction,
 } from '@/lib';
 
+import { RouterDialogOnCloseProps } from '../../../ui';
 import { DeleteDialog, ErrorDialog } from '../../../feedback';
 
-type Props = {
+type Props = RouterDialogOnCloseProps & {
   id: string;
-  onCloseBack?: boolean | undefined;
-  onCloseRedirect?: string | undefined;
-  onCloseAction?: (() => void) | undefined;
 };
 
 export const ProductDelete: FC<Props> = async ({
