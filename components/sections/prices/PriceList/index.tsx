@@ -8,6 +8,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import {
+  getPriceDisplayName,
   getPricesWithSupermarketByProductIdAction,
   PriceWithSupermarket,
   Result,
@@ -67,9 +68,7 @@ export const PriceList: FC<Props> = ({ productId }) => {
           }}
           sx={{ paddingLeft: 10 }}
           divider={i < array.length - 1}
-          primary={[price.name, price.price, price.yuka]
-            .filter(Boolean)
-            .join(' - ')}
+          primary={getPriceDisplayName(price)}
           secondaryAction={
             <Box sx={{ display: 'flex', gap: 1 }}>
               <PriceActions action='favorite' price={price} />

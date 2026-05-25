@@ -11,6 +11,16 @@ import {
   TagErrors,
 } from '../types';
 
+export const getPriceDisplayName = ({
+  name,
+  price,
+  yuka,
+}: {
+  name: string;
+  price: number | string;
+  yuka: number | string;
+}) => [name, price, yuka].filter(Boolean).join(' - ');
+
 export const validateId = (id: string) => {
   const errors: IdErrors = {};
 
@@ -78,3 +88,8 @@ export const errorResult = <T = unknown>(message?: string, data?: T) =>
   ({ isError: true, data, message }) as Result<T>;
 export const successResult = <T = unknown>(data?: T, message?: string) =>
   ({ isError: false, data, message }) as Result<T>;
+
+export const checkDataFound = (result?: Result, addChecks?: boolean) =>
+  addChecks || result?.isError || !result?.data
+    ? (result?.message ?? 'No data found')
+    : '';
