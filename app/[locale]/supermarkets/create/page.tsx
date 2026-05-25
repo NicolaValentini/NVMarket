@@ -1,9 +1,9 @@
-import { RouterDialog, SupermarketForm } from '@/components';
+import { LoadingSuspense, SupermarketUpsert } from '@/components';
 
 export default function SupermarketCreatePage() {
   return (
-    <RouterDialog open onCloseRedirect='./'>
-      <SupermarketForm onCloseRedirect='./' />
-    </RouterDialog>
+    <LoadingSuspense>
+      <SupermarketUpsert onCloseRedirect='./' />
+    </LoadingSuspense>
   );
 }
