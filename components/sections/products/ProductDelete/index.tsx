@@ -1,6 +1,62 @@
-import { ProductDeleteWithFetch } from './ProductDeleteWithFetch';
-import { ProductDelete as ProductDeleteBase } from './ProductDelete';
+import { FC } from 'react';
 
-export const ProductDelete = Object.assign(ProductDeleteBase, {
-  WithFetch: ProductDeleteWithFetch,
-});
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
+import {
+  checkDataFound,
+  deleteProductAction,
+  getProductByIdAction,
+} from '@/lib';
+
+import { DeleteDialog, ErrorDialog } from '../../../feedback';
+
+type Props = {
+  id: string;
+  onCloseBack?: boolean | undefined;
+  onCloseRedirect?: string | undefined;
+  onCloseAction?: (() => void) | undefined;
+};
+
+export const ProductDelete: FC<Props> = async ({
+  id,
+  onCloseBack,
+  onCloseAction,
+  onCloseRedirect,
+}) => {
+  const product = id ? await getProductByIdAction(id) : undefined;
+
+  const error = checkDataFound(product, !id);
+  const deleteAction = deleteProductAction.bind(null, id);
+
+  return error ? (
+    <ErrorDialog
+      open
+      message={error}
+      onCloseBack={onCloseBack}
+      onCloseAction={onCloseAction}
+      onCloseRedirect={onCloseRedirect}
+    />
+  ) : (
+    <DeleteDialog
+      title='Delete Product'
+      deleteAction={deleteAction}
+      onCloseBack={onCloseBack}
+      onCloseAction={onCloseAction}
+      onCloseRedirect={onCloseRedirect}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Typography>Are you sure you want to delete the product</Typography>
+        <strong>{product!.data!.name}</strong>
+        <Typography>?</Typography>
+      </Box>
+    </DeleteDialog>
+  );
+};
