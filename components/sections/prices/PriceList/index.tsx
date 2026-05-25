@@ -16,6 +16,7 @@ import {
 
 import { ErrorAlert } from '../../../feedback';
 import { ColoredListItem, SmallEmptyState } from '../../../ui';
+
 import { PriceActions } from '../PriceActions';
 
 type Props = {

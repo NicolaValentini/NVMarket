@@ -3,7 +3,7 @@ import { FC } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 
-import { RouterDialog, RouterDialogOnCloseProps } from '../../ui/RouterDialog';
+import { RouterDialog, RouterDialogOnCloseProps } from '../../ui';
 
 import { ErrorAlert } from '../ErrorAlert';
 

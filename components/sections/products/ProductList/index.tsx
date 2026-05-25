@@ -1,12 +1,14 @@
 import { FC } from 'react';
+
 import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 
 import { getProductsWithQuantityAndTagsAction } from '@/lib';
 
-import { ErrorAlert } from '../../../feedback';
 import { EmptyState } from '../../../ui';
+import { ErrorAlert } from '../../../feedback';
+
 import { ProductListItem } from '../ProductListItem';
 
 export const ProductList: FC = async () => {

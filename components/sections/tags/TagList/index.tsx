@@ -11,6 +11,7 @@ import { getTagsAction } from '@/lib';
 
 import { ErrorAlert } from '../../../feedback';
 import { EmptyState, TagChip } from '../../../ui';
+
 import { TagActions } from '../TagActions';
 
 export const TagList: FC = async () => {

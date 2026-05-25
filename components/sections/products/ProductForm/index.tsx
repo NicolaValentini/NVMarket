@@ -22,14 +22,16 @@ import {
 } from '@/lib';
 
 import { ErrorAlert } from '../../../feedback';
-import { RouterDialog, TagChip, TagSelect } from '../../../ui';
+import {
+  RouterDialog,
+  RouterDialogOnCloseProps,
+  TagChip,
+  TagSelect,
+} from '../../../ui';
 
-type Props = {
+type Props = RouterDialogOnCloseProps & {
   tags: Tag[];
   tagsError?: string | undefined;
-  onCloseBack?: boolean | undefined;
-  onCloseRedirect?: string | undefined;
-  onCloseAction?: (() => void) | undefined;
   product?: ProductWithTag | undefined;
 };
 

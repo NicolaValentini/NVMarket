@@ -9,6 +9,7 @@ import { getSupermarketsAction } from '@/lib';
 
 import { ErrorAlert } from '../../../feedback';
 import { ColoredListItem, EmptyState } from '../../../ui';
+
 import { SupermarketActions } from '../SupermarketActions';
 
 export const SupermarketList: FC = async () => {

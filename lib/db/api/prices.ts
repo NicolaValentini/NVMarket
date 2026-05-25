@@ -1,8 +1,8 @@
 import 'server-only';
 
 import { getDb } from '../../db';
-import { Price, PriceWithSupermarket } from '../../types';
 import { errorResult, successResult } from '../../utils';
+import { Price, PriceWithSupermarket } from '../../types';
 
 export function getPricesWithSupermarketByProductId(id: string) {
   try {

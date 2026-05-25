@@ -14,6 +14,7 @@ import { ProductWithQuantityAndTags } from '@/lib';
 
 import { TagChip } from '../../../ui';
 import { PriceActions, PriceList } from '../../prices';
+
 import { ProductActions } from '../ProductActions';
 
 type Props = {
