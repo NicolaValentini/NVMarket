@@ -5,20 +5,25 @@ import { useRouter } from 'next/navigation';
 
 import Dialog from '@mui/material/Dialog';
 
-type Props = {
-  open: boolean;
+export type RouterDialogOnCloseProps = {
   onCloseBack?: boolean | undefined;
   onCloseRedirect?: string | undefined;
   onCloseAction?: (() => void) | undefined;
-  children: ReactNode;
 };
+
+type Props = RouterDialogOnCloseProps & {
+  open: boolean;
+} & (
+    | { children: ReactNode }
+    | { childrenAction: (handleClose: () => void) => ReactNode }
+  );
 
 export const RouterDialog: FC<Props> = ({
   open,
   onCloseBack,
   onCloseAction,
   onCloseRedirect,
-  children,
+  ...rest
 }) => {
   const router = useRouter();
 
@@ -30,7 +35,7 @@ export const RouterDialog: FC<Props> = ({
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth='xs' fullWidth>
-      {children}
+      {'children' in rest ? rest.children : rest.childrenAction(handleClose)}
     </Dialog>
   );
 };

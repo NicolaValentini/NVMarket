@@ -3,23 +3,21 @@ import { FC } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 
-import { RouterDialog } from '../../ui/RouterDialog';
+import { RouterDialog, RouterDialogOnCloseProps } from '../../ui/RouterDialog';
+
 import { ErrorAlert } from '../ErrorAlert';
 
-type Props = {
+type Props = RouterDialogOnCloseProps & {
   open: boolean;
-  title: string;
-  onClose?: () => void;
-  onCloseBack?: boolean;
-  onCloseRedirect?: string;
+  title?: string;
   message: string | null | undefined;
 };
 
 export const ErrorDialog: FC<Props> = ({
   open,
   title,
-  onClose,
   onCloseBack,
+  onCloseAction,
   onCloseRedirect,
   message,
 }) => {
@@ -28,11 +26,11 @@ export const ErrorDialog: FC<Props> = ({
   return (
     <RouterDialog
       open={open}
-      onCloseAction={onClose}
       onCloseBack={onCloseBack}
+      onCloseAction={onCloseAction}
       onCloseRedirect={onCloseRedirect}
     >
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle>{title ?? 'An error occurred'}</DialogTitle>
 
       <DialogContent>
         <ErrorAlert message={message} />
