@@ -48,13 +48,13 @@ export const TagSelect: FC<Props> = ({
         renderValue={selected => (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
             {selected.map(value => (
-              <TagChip key={value} tag={JSON.parse(value)} />
+              <TagChip key={value} tag={tags.find(tag => tag.id === value)!} />
             ))}
           </Box>
         )}
       >
         {tags.map(tag => {
-          const value = JSON.stringify(tag);
+          const value = tag.id;
           const selected = selectedTags.includes(value);
 
           return (
@@ -69,11 +69,7 @@ export const TagSelect: FC<Props> = ({
 
       <FormHelperText>{error}</FormHelperText>
 
-      <input
-        type='hidden'
-        name='tags'
-        value={selectedTags.map(tag => JSON.parse(tag).id)}
-      />
+      <input type='hidden' name='tags' value={selectedTags} />
     </FormControl>
   );
 };

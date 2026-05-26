@@ -46,15 +46,14 @@ export const PriceForm: FC<Props> = ({
   const product = 'product' in rest ? rest.product : undefined;
 
   const isEdit = !!priceProps?.id;
-  const supermarket = supermarkets.find(
-    supermarket => supermarket.id === priceProps?.supermarket_id,
-  );
 
   const [name, setName] = useState(priceProps?.name ?? '');
   const [price, setPrice] = useState(priceProps?.price?.toString() ?? '');
   const [yuka, setYuka] = useState(priceProps?.yuka?.toString() ?? '');
   const [selectedSupermarket, setSupermarket] = useState(
-    supermarket ? JSON.stringify(supermarket) : '',
+    supermarkets.find(
+      supermarket => supermarket.id === priceProps?.supermarket_id,
+    )?.id ?? '',
   );
 
   const [loading, startTransition] = useTransition();
@@ -183,11 +182,9 @@ export const PriceForm: FC<Props> = ({
                     price,
                     yuka,
                   })}
-                  item={
-                    selectedSupermarket
-                      ? JSON.parse(selectedSupermarket)
-                      : undefined
-                  }
+                  item={supermarkets.find(
+                    _supermarket => _supermarket.id === selectedSupermarket,
+                  )}
                 />
               </List>
             </Paper>

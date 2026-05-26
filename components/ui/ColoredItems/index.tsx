@@ -23,7 +23,7 @@ export const coloredStyles = (color?: string, sx?: object) => ({
 });
 
 type Props = {
-  item?: { id: string; name: string; color: string };
+  item?: { id: string; name: string; color: string } | undefined;
   divider?: boolean;
   primary?: ReactNode;
   secondaryAction?: ReactNode;

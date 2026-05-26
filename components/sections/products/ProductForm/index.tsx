@@ -47,7 +47,7 @@ export const ProductForm: FC<Props> = ({
 
   const [name, setName] = useState(product?.name ?? '');
   const [selectedTags, setTags] = useState(
-    product?.tags?.map(tag => JSON.stringify(tag)) ?? [],
+    product?.tags?.map(tag => tag.id) ?? [],
   );
 
   const [loading, startTransition] = useTransition();
@@ -127,7 +127,10 @@ export const ProductForm: FC<Props> = ({
                   >
                     {name?.trim()?.toUpperCase() || 'PREVIEW'}
                     {selectedTags.map(tag => (
-                      <TagChip key={tag} tag={JSON.parse(tag)} />
+                      <TagChip
+                        key={tag}
+                        tag={tags.find(_tag => _tag.id === tag)!}
+                      />
                     ))}
                   </ListItemText>
                 </ListItem>

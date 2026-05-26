@@ -42,12 +42,17 @@ export const SupermarketSelect: FC<Props> = ({
         input={<OutlinedInput label='Supermarket' />}
         renderValue={selected => (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-            <ColoredBox key={selected} item={JSON.parse(selected)} />
+            <ColoredBox
+              key={selected}
+              item={
+                supermarkets.find(supermarket => supermarket.id === selected)!
+              }
+            />
           </Box>
         )}
       >
         {supermarkets.map(supermarket => {
-          const value = JSON.stringify(supermarket);
+          const value = supermarket.id;
           const selected = selectedSupermarket.includes(value);
 
           return (
@@ -66,11 +71,7 @@ export const SupermarketSelect: FC<Props> = ({
 
       <FormHelperText>{error}</FormHelperText>
 
-      <input
-        type='hidden'
-        name='supermarket'
-        value={selectedSupermarket ? JSON.parse(selectedSupermarket).id : ''}
-      />
+      <input type='hidden' name='supermarket' value={selectedSupermarket} />
     </FormControl>
   );
 };
