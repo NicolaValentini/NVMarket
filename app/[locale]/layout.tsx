@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
-import { getDictionary, Locale } from '@/lib';
 import { AppShell, Providers } from '@/components';
+import { getDictionary, Locale, setLocaleCookie } from '@/lib';
 
 type Props = {
   children: ReactNode;
@@ -13,7 +13,11 @@ export default async function Layout({ children, params }: Props) {
   const dictionary = await getDictionary(locale);
 
   return (
-    <Providers locale={locale} dictionary={dictionary}>
+    <Providers
+      locale={locale}
+      dictionary={dictionary}
+      setCookieLocaleAction={setLocaleCookie}
+    >
       <AppShell>{children}</AppShell>
     </Providers>
   );

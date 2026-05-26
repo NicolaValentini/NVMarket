@@ -41,18 +41,30 @@ export function proxy(request: NextRequest) {
     locale => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );
 
+  let locale, response;
+
   // If missing locale, redirect to best match
   if (!hasLocalePrefix) {
-    const locale = getLocale(request);
+    locale = getLocale(request);
     if (!locale) return;
 
     const url = request.nextUrl.clone();
     url.pathname = pathname === '/' ? `/${locale}` : `/${locale}${pathname}`;
 
-    return NextResponse.redirect(url);
+    response = NextResponse.redirect(url);
+  } else {
+    locale = pathname.split('/')[1] ?? i18n.defaultLocale;
+
+    response = NextResponse.next();
   }
 
-  return;
+  response.cookies.set('locale', locale, {
+    path: '/',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 365,
+  });
+
+  return response;
 }
 
 // Matcher identical to your previous config, but slightly safer
