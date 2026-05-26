@@ -8,10 +8,13 @@ export function getPricesWithSupermarketByProductId(id: string) {
   try {
     return successResult(
       getDb()
-        .prepare<
-          [string],
-          PriceWithSupermarket
-        >('SELECT p.*, s.name AS supermarketName, s.color AS supermarketColor FROM prices p LEFT JOIN supermarkets s ON p.supermarket_id = s.id WHERE product_id = ? ORDER BY p.name ASC')
+        .prepare<[string], PriceWithSupermarket>(
+          `SELECT DISTINCT p.*, s.name AS supermarketName, s.color AS supermarketColor
+           FROM prices p
+           LEFT JOIN supermarkets s ON p.supermarket_id = s.id
+           WHERE product_id = ?
+           ORDER BY p.name ASC`,
+        )
         .all(id),
     );
   } catch (error) {
@@ -24,7 +27,11 @@ export function getPriceById(id: string) {
   try {
     return successResult(
       getDb()
-        .prepare<[string], Price>('SELECT * FROM prices WHERE id = ?')
+        .prepare<[string], Price>(
+          `SELECT *
+           FROM prices
+           WHERE id = ?`,
+        )
         .get(id),
     );
   } catch (error) {
@@ -41,10 +48,11 @@ export function getPriceByNameAndProductAndSupermarket(
   try {
     return successResult(
       getDb()
-        .prepare<
-          [string, string, string],
-          Price
-        >('SELECT * FROM prices WHERE name = ? AND product_id = ? AND supermarket_id = ?')
+        .prepare<[string, string, string], Price>(
+          `SELECT *
+           FROM prices
+           WHERE name = ? AND product_id = ? AND supermarket_id = ?`,
+        )
         .get(name.trim().toUpperCase(), productId, supermarketId),
     );
   } catch (error) {
@@ -62,9 +70,10 @@ export function createPrice(
 ) {
   try {
     getDb()
-      .prepare<
-        [string, string, string, string, number, number, number]
-      >('INSERT INTO prices (id, product_id, supermarket_id, name, price, yuka, favorite) VALUES (?, ?, ?, ?, ?, ?, ?)')
+      .prepare<[string, string, string, string, number, number, number]>(
+        `INSERT INTO prices (id, product_id, supermarket_id, name, price, yuka, favorite)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      )
       .run(
         crypto.randomUUID(),
         productId,
@@ -92,9 +101,11 @@ export function updatePrice(
 ) {
   try {
     getDb()
-      .prepare<
-        [string, string, string, number, number, string]
-      >('UPDATE prices SET product_id = ?, supermarket_id = ?, name = ?, price = ?, yuka = ? WHERE id = ?')
+      .prepare<[string, string, string, number, number, string]>(
+        `UPDATE prices
+         SET product_id = ?, supermarket_id = ?, name = ?, price = ?, yuka = ?
+         WHERE id = ?`,
+      )
       .run(
         productId,
         supermarketId,
@@ -114,7 +125,11 @@ export function updatePrice(
 export function setFavoritePrice(id: string, favorite: boolean) {
   try {
     getDb()
-      .prepare<[number, string]>('UPDATE prices SET favorite = ? WHERE id = ?')
+      .prepare<[number, string]>(
+        `UPDATE prices
+         SET favorite = ?
+         WHERE id = ?`,
+      )
       .run(Number(favorite), id);
 
     return successResult();
@@ -126,7 +141,13 @@ export function setFavoritePrice(id: string, favorite: boolean) {
 
 export function deletePrice(id: string) {
   try {
-    getDb().prepare<[string]>('DELETE FROM prices WHERE id = ?').run(id);
+    getDb()
+      .prepare<[string]>(
+        `DELETE
+         FROM prices
+         WHERE id = ?`,
+      )
+      .run(id);
 
     return successResult();
   } catch (error) {

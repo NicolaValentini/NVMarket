@@ -13,10 +13,12 @@ export function getProductsWithQuantity() {
   try {
     return successResult(
       getDb()
-        .prepare<
-          [],
-          ProductWithQuantity
-        >('SELECT p.*, c.quantity AS quantity FROM products p LEFT JOIN cart_items c ON p.id = c.product_id ORDER BY name ASC')
+        .prepare<[], ProductWithQuantity>(
+          `SELECT DISTINCT p.*, c.quantity AS quantity
+           FROM products p
+           LEFT JOIN cart_items c ON p.id = c.product_id
+           ORDER BY p.name ASC`,
+        )
         .all(),
     );
   } catch (error) {
@@ -24,6 +26,7 @@ export function getProductsWithQuantity() {
     return errorResult<ProductWithQuantity[]>();
   }
 }
+
 export function getProductsWithQuantityAndTags() {
   try {
     const result = getProductsWithQuantity();
@@ -50,7 +53,11 @@ export function getProductById(id: string) {
   try {
     return successResult(
       getDb()
-        .prepare<[string], Product>('SELECT * FROM products WHERE id = ?')
+        .prepare<[string], Product>(
+          `SELECT *
+           FROM products
+           WHERE id = ?`,
+        )
         .get(id),
     );
   } catch (error) {
@@ -85,7 +92,11 @@ export function getProductByName(name: string) {
   try {
     return successResult(
       getDb()
-        .prepare<[string], Product>('SELECT * FROM products WHERE name = ?')
+        .prepare<[string], Product>(
+          `SELECT *
+           FROM products
+           WHERE name = ?`,
+        )
         .get(name.trim().toUpperCase()),
     );
   } catch (error) {
@@ -99,11 +110,13 @@ export function createProduct(name: string, tags: string[]) {
     const id = crypto.randomUUID();
 
     const insertProduct = getDb().prepare<[string, string]>(
-      'INSERT INTO products (id, name) VALUES (?, ?)',
+      `INSERT INTO products (id, name)
+       VALUES (?, ?)`,
     );
 
     const insertTag = getDb().prepare<[string, string]>(
-      'INSERT INTO product_tags (product_id, tag_id) VALUES (?, ?)',
+      `INSERT INTO product_tags (product_id, tag_id)
+       VALUES (?, ?)`,
     );
 
     const transaction = getDb().transaction(() => {
@@ -125,15 +138,20 @@ export function createProduct(name: string, tags: string[]) {
 export function updateProduct(id: string, name: string, tags: string[]) {
   try {
     const updateProduct = getDb().prepare<[string, string]>(
-      'UPDATE products SET name = ? WHERE id = ?',
+      `UPDATE products
+       SET name = ?
+       WHERE id = ?`,
     );
 
     const deleteTags = getDb().prepare<[string]>(
-      'DELETE FROM product_tags WHERE product_id = ?',
+      `DELETE
+       FROM product_tags
+       WHERE product_id = ?`,
     );
 
     const insertTag = getDb().prepare<[string, string]>(
-      'INSERT INTO product_tags (product_id, tag_id) VALUES (?, ?)',
+      `INSERT INTO product_tags (product_id, tag_id)
+       VALUES (?, ?)`,
     );
 
     const transaction = getDb().transaction(() => {
@@ -155,7 +173,13 @@ export function updateProduct(id: string, name: string, tags: string[]) {
 
 export function deleteProduct(id: string) {
   try {
-    getDb().prepare<[string]>('DELETE FROM products WHERE id = ?').run(id);
+    getDb()
+      .prepare<[string]>(
+        `DELETE
+         FROM products
+         WHERE id = ?`,
+      )
+      .run(id);
 
     return successResult();
   } catch (error) {

@@ -7,7 +7,13 @@ import { errorResult, successResult } from '../../utils';
 export function getTags() {
   try {
     return successResult(
-      getDb().prepare<[], Tag>('SELECT * FROM tags ORDER BY name ASC').all(),
+      getDb()
+        .prepare<[], Tag>(
+          `SELECT *
+           FROM tags
+           ORDER BY name ASC`,
+        )
+        .all(),
     );
   } catch (error) {
     console.error('Failed to fetch tags', error);
@@ -18,7 +24,13 @@ export function getTags() {
 export function getTagById(id: string) {
   try {
     return successResult(
-      getDb().prepare<[string], Tag>('SELECT * FROM tags WHERE id = ?').get(id),
+      getDb()
+        .prepare<[string], Tag>(
+          `SELECT *
+           FROM tags
+           WHERE id = ?`,
+        )
+        .get(id),
     );
   } catch (error) {
     console.error('Failed to fetch tag', error);
@@ -30,7 +42,11 @@ export function getTagByName(name: string) {
   try {
     return successResult(
       getDb()
-        .prepare<[string], Tag>('SELECT * FROM tags WHERE name = ?')
+        .prepare<[string], Tag>(
+          `SELECT *
+           FROM tags
+           WHERE name = ?`,
+        )
         .get(name.trim().toUpperCase()),
     );
   } catch (error) {
@@ -43,10 +59,13 @@ export function getTagsByProductId(id: string) {
   try {
     return successResult(
       getDb()
-        .prepare<
-          [string],
-          Tag
-        >('SELECT t.* FROM tags t JOIN product_tags pt ON pt.tag_id = t.id WHERE pt.product_id = ? ORDER BY name ASC')
+        .prepare<[string], Tag>(
+          `SELECT t.*
+           FROM tags t
+           LEFT JOIN product_tags pt ON pt.tag_id = t.id
+           WHERE pt.product_id = ?
+           ORDER BY name ASC`,
+        )
         .all(id),
     );
   } catch (error) {
@@ -59,10 +78,11 @@ export function checkTagUsageById(id: string) {
   try {
     return successResult(
       getDb()
-        .prepare<
-          [string],
-          ProductTag
-        >('SELECT * FROM product_tags WHERE tag_id = ?')
+        .prepare<[string], ProductTag>(
+          `SELECT *
+           FROM product_tags
+           WHERE tag_id = ?`,
+        )
         .all(id),
     );
   } catch (error) {
@@ -74,9 +94,10 @@ export function checkTagUsageById(id: string) {
 export function createTag(name: string, color: string) {
   try {
     getDb()
-      .prepare<
-        [string, string, string]
-      >('INSERT INTO tags (id, name, color) VALUES (?, ?, ?)')
+      .prepare<[string, string, string]>(
+        `INSERT INTO tags (id, name, color)
+         VALUES (?, ?, ?)`,
+      )
       .run(crypto.randomUUID(), name.trim().toUpperCase(), color);
 
     return successResult();
@@ -89,9 +110,11 @@ export function createTag(name: string, color: string) {
 export function updateTag(id: string, name: string, color: string) {
   try {
     getDb()
-      .prepare<
-        [string, string, string]
-      >('UPDATE tags SET name = ?, color = ? WHERE id = ?')
+      .prepare<[string, string, string]>(
+        `UPDATE tags
+         SET name = ?, color = ?
+         WHERE id = ?`,
+      )
       .run(name.trim().toUpperCase(), color, id);
 
     return successResult();
@@ -103,7 +126,13 @@ export function updateTag(id: string, name: string, color: string) {
 
 export function deleteTag(id: string) {
   try {
-    getDb().prepare<[string]>('DELETE FROM tags WHERE id = ?').run(id);
+    getDb()
+      .prepare<[string]>(
+        `DELETE
+         FROM tags
+         WHERE id = ?`,
+      )
+      .run(id);
 
     return successResult();
   } catch (error) {

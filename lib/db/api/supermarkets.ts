@@ -8,10 +8,11 @@ export function getSupermarkets() {
   try {
     return successResult(
       getDb()
-        .prepare<
-          [],
-          Supermarket
-        >('SELECT * FROM supermarkets ORDER BY name ASC')
+        .prepare<[], Supermarket>(
+          `SELECT *
+           FROM supermarkets
+           ORDER BY name ASC`,
+        )
         .all(),
     );
   } catch (error) {
@@ -24,10 +25,11 @@ export function getSupermarketById(id: string) {
   try {
     return successResult(
       getDb()
-        .prepare<
-          [string],
-          Supermarket
-        >('SELECT * FROM supermarkets WHERE id = ?')
+        .prepare<[string], Supermarket>(
+          `SELECT *
+           FROM supermarkets
+           WHERE id = ?`,
+        )
         .get(id),
     );
   } catch (error) {
@@ -40,10 +42,11 @@ export function getSupermarketByName(name: string) {
   try {
     return successResult(
       getDb()
-        .prepare<
-          [string],
-          Supermarket
-        >('SELECT * FROM supermarkets WHERE name = ?')
+        .prepare<[string], Supermarket>(
+          `SELECT *
+           FROM supermarkets
+           WHERE name = ?`,
+        )
         .get(name.trim().toUpperCase()),
     );
   } catch (error) {
@@ -55,9 +58,10 @@ export function getSupermarketByName(name: string) {
 export function createSupermarket(name: string, color: string) {
   try {
     getDb()
-      .prepare<
-        [string, string, string]
-      >('INSERT INTO supermarkets (id, name, color) VALUES (?, ?, ?)')
+      .prepare<[string, string, string]>(
+        `INSERT INTO supermarkets (id, name, color)
+         VALUES (?, ?, ?)`,
+      )
       .run(crypto.randomUUID(), name.trim().toUpperCase(), color);
 
     return successResult();
@@ -70,9 +74,11 @@ export function createSupermarket(name: string, color: string) {
 export function updateSupermarket(id: string, name: string, color: string) {
   try {
     getDb()
-      .prepare<
-        [string, string, string]
-      >('UPDATE supermarkets SET name = ?, color = ? WHERE id = ?')
+      .prepare<[string, string, string]>(
+        `UPDATE supermarkets
+         SET name = ?, color = ?
+         WHERE id = ?`,
+      )
       .run(name.trim().toUpperCase(), color, id);
 
     return successResult();
@@ -84,7 +90,13 @@ export function updateSupermarket(id: string, name: string, color: string) {
 
 export function deleteSupermarket(id: string) {
   try {
-    getDb().prepare<[string]>('DELETE FROM supermarkets WHERE id = ?').run(id);
+    getDb()
+      .prepare<[string]>(
+        `DELETE
+         FROM supermarkets
+         WHERE id = ?`,
+      )
+      .run(id);
 
     return successResult();
   } catch (error) {

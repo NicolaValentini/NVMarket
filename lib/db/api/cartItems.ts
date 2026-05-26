@@ -30,10 +30,11 @@ export function getCartItemByProductId(productId: string) {
   try {
     return successResult(
       getDb()
-        .prepare<
-          [string],
-          CartItem
-        >('SELECT * FROM cart_items WHERE product_id = ?')
+        .prepare<[string], CartItem>(
+          `SELECT *
+           FROM cart_items
+           WHERE product_id = ?`,
+        )
         .get(productId),
     );
   } catch (error) {
@@ -45,9 +46,10 @@ export function getCartItemByProductId(productId: string) {
 export function createCartItem(productId: string) {
   try {
     getDb()
-      .prepare<
-        [string, string, number]
-      >('INSERT INTO cart_items (id, product_id, quantity) VALUES (?, ?, ?)')
+      .prepare<[string, string, number]>(
+        `INSERT INTO cart_items (id, product_id, quantity)
+         VALUES (?, ?, ?)`,
+      )
       .run(crypto.randomUUID(), productId, 1);
 
     return successResult();
@@ -68,7 +70,9 @@ export function increaseCartItem(productId: string) {
     if (result.data) {
       getDb()
         .prepare<[number, string]>(
-          'UPDATE cart_items SET quantity = ? WHERE product_id = ?',
+          `UPDATE cart_items
+           SET quantity = ?
+           WHERE product_id = ?`,
         )
         .run(result.data.quantity + 1, productId);
 
@@ -93,7 +97,9 @@ export function decreaseCartItem(productId: string) {
     if (result.data && result.data.quantity > 1) {
       getDb()
         .prepare<[number, string]>(
-          'UPDATE cart_items SET quantity = ? WHERE product_id = ?',
+          `UPDATE cart_items
+           SET quantity = ?
+           WHERE product_id = ?`,
         )
         .run(result.data.quantity - 1, productId);
 
@@ -109,7 +115,13 @@ export function decreaseCartItem(productId: string) {
 
 export function deleteCartItem(id: string) {
   try {
-    getDb().prepare<[string]>('DELETE FROM cart_items WHERE id = ?').run(id);
+    getDb()
+      .prepare<[string]>(
+        `DELETE
+         FROM cart_items
+         WHERE id = ?`,
+      )
+      .run(id);
 
     return successResult();
   } catch (error) {
