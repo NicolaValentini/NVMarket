@@ -9,12 +9,25 @@ import {
   getProductById,
   getProductByName,
   getProductsWithQuantityAndTags,
+  getProductsWithQuantityAndTagsBySupermarket,
   getProductWithTagsById,
   updateProduct,
 } from '../db';
 
 export async function getProductsWithQuantityAndTagsAction() {
   const result = getProductsWithQuantityAndTags();
+
+  if (result.isError) {
+    return errorResult('Something went wrong during products fetching', []);
+  }
+
+  return result;
+}
+
+export async function getProductsWithQuantityAndTagsBySupermarketAction(
+  supermarketId: string,
+) {
+  const result = getProductsWithQuantityAndTagsBySupermarket(supermarketId);
 
   if (result.isError) {
     return errorResult('Something went wrong during products fetching', []);

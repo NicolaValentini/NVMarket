@@ -104,6 +104,7 @@ export const ProductForm: FC<Props> = ({
             />
 
             <TagSelect
+              multiple
               tags={tags}
               disabled={loading}
               selectedTags={selectedTags}

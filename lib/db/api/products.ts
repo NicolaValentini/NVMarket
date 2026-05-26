@@ -49,6 +49,39 @@ export function getProductsWithQuantityAndTags() {
   }
 }
 
+export function getProductsWithQuantityAndTagsBySupermarket(
+  supermarketId: string,
+) {
+  try {
+    const result = successResult(
+      getDb()
+        .prepare<[string], ProductWithQuantity>(
+          `SELECT DISTINCT p.*, c.quantity AS quantity
+           FROM products p
+           LEFT JOIN cart_items c ON p.id = c.product_id
+           INNER JOIN prices pr ON pr.product_id = p.id
+           WHERE pr.supermarket_id = ?
+           ORDER BY p.name ASC`,
+        )
+        .all(supermarketId),
+    );
+
+    if (result.isError) throw new Error('Failed to fetch filtered products');
+
+    return successResult(
+      result.data?.map(
+        (product): ProductWithQuantityAndTags => ({
+          ...product,
+          tags: getTagsByProductId(product.id)?.data ?? [],
+        }),
+      ) ?? [],
+    );
+  } catch (error) {
+    console.error('Failed to fetch products by supermarket', error);
+    return errorResult<ProductWithQuantityAndTags[]>();
+  }
+}
+
 export function getProductById(id: string) {
   try {
     return successResult(

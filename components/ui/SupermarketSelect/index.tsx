@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
 import Box from '@mui/material/Box';
+import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { Supermarket } from '@/lib';
 
@@ -28,16 +28,20 @@ export const SupermarketSelect: FC<Props> = ({
   disabled,
   error,
 }) => {
-  const handleChange = (event: SelectChangeEvent) =>
-    setSupermarket(event.target.value);
+  const handleChange = (value: string) =>
+    setSupermarket(selectedSupermarket === value ? '' : value);
 
   return (
-    <FormControl fullWidth error={!!error} disabled={disabled}>
+    <FormControl
+      fullWidth
+      error={!!error}
+      disabled={disabled}
+      sx={{ minWidth: 160 }}
+    >
       <InputLabel id='supermarket-label'>Supermarket</InputLabel>
 
       <Select
         value={selectedSupermarket}
-        onChange={handleChange}
         labelId='supermarket-label'
         input={<OutlinedInput label='Supermarket' />}
         renderValue={selected => (
@@ -53,12 +57,13 @@ export const SupermarketSelect: FC<Props> = ({
       >
         {supermarkets.map(supermarket => {
           const value = supermarket.id;
-          const selected = selectedSupermarket.includes(value);
+          const selected = selectedSupermarket === value;
 
           return (
             <MenuItem
               key={supermarket.id}
               value={value}
+              onClick={() => handleChange(value)}
               sx={coloredStyles(supermarket.color)}
             >
               <Checkbox checked={selected} />
