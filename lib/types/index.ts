@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { CartItem, Price, Product, Supermarket, Tag } from './dao';
 
 export * from './dao';
@@ -55,4 +56,10 @@ export type Result<T = unknown> = {
   isError: boolean;
   data?: T;
   message?: string;
+};
+
+export type NavItem = {
+  label: string;
+  icon: ReactNode;
+  path: string;
 };

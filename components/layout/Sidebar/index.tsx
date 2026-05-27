@@ -1,7 +1,8 @@
 'use client';
 
-import { FC, ReactNode, use } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { FC, use } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import List from '@mui/material/List';
 import Drawer from '@mui/material/Drawer';
@@ -12,21 +13,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import StorefrontIcon from '@mui/icons-material/Storefront';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
+import { NAV_ITEMS } from '@/lib';
 import { I18nContext } from '@/context';
 
 const DRAWER_WIDTH = 220;
 const DRAWER_WIDTH_COLLAPSED = 64;
-
-type NavItem = {
-  label: string;
-  icon: ReactNode;
-  path: string;
-};
 
 type Props = {
   open: boolean;
@@ -34,31 +26,7 @@ type Props = {
 
 export const Sidebar: FC<Props> = ({ open }) => {
   const pathname = usePathname();
-  const router = useRouter();
   const { locale } = use(I18nContext);
-
-  const navItems: NavItem[] = [
-    {
-      label: 'Products',
-      icon: <InventoryIcon />,
-      path: `/${locale}/products`,
-    },
-    {
-      label: 'Tags',
-      icon: <LocalOfferIcon />,
-      path: `/${locale}/tags`,
-    },
-    {
-      label: 'Supermarkets',
-      icon: <StorefrontIcon />,
-      path: `/${locale}/supermarkets`,
-    },
-    {
-      label: 'Cart',
-      icon: <ShoppingBasketIcon />,
-      path: `/${locale}/cart`,
-    },
-  ];
 
   return (
     <Drawer
@@ -92,20 +60,21 @@ export const Sidebar: FC<Props> = ({ open }) => {
       <Divider />
 
       <List>
-        {navItems.map(item => (
+        {NAV_ITEMS.map(item => (
           <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
             <Tooltip title={!open ? item.label : ''} placement='right'>
-              <ListItemButton
-                selected={pathname.startsWith(item.path)}
-                onClick={() => router.push(item.path)}
-                sx={{ minHeight: 48, px: 2.5 }}
-              >
-                <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : 'auto' }}>
-                  {item.icon}
-                </ListItemIcon>
+              <Link href={item.path}>
+                <ListItemButton
+                  selected={pathname.startsWith('/' + locale + item.path)}
+                  sx={{ minHeight: 48, px: 2.5 }}
+                >
+                  <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : 'auto' }}>
+                    {item.icon}
+                  </ListItemIcon>
 
-                {open && <ListItemText primary={item.label} />}
-              </ListItemButton>
+                  {open && <ListItemText primary={item.label} />}
+                </ListItemButton>
+              </Link>
             </Tooltip>
           </ListItem>
         ))}

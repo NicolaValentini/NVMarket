@@ -26,8 +26,8 @@ export const ProductFilters: FC<Props> = ({
   selectedTagId = '',
   selectedSupermarketId = '',
 }) => {
-  const pathname = usePathname();
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [tag, setTag] = useState(selectedTagId);
@@ -36,11 +36,10 @@ export const ProductFilters: FC<Props> = ({
   const updateParam = useCallback(
     (key: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
-      if (value) {
-        params.set(key, value);
-      } else {
-        params.delete(key);
-      }
+
+      if (value) params.set(key, value);
+      else params.delete(key);
+
       router.push(`${pathname}?${params.toString()}`);
     },
     [router, pathname, searchParams],

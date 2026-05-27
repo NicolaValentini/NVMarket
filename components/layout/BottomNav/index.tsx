@@ -1,30 +1,22 @@
 'use client';
 
 import { FC, use } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import Paper from '@mui/material/Paper';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import StorefrontIcon from '@mui/icons-material/Storefront';
 import BottomNavigation from '@mui/material/BottomNavigation';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 
+import { NAV_ITEMS } from '@/lib';
 import { I18nContext } from '@/context';
 
 export const BottomNav: FC = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const { locale } = use(I18nContext);
 
-  const getValue = () => {
-    if (pathname.includes('/products')) return 0;
-    if (pathname.includes('/tags')) return 1;
-    if (pathname.includes('/supermarkets')) return 2;
-    if (pathname.includes('/cart')) return 3;
-    return 0;
-  };
+  const getValue = () =>
+    NAV_ITEMS.findIndex(item => pathname.startsWith('/' + locale + item.path));
 
   return (
     <Paper
@@ -39,29 +31,13 @@ export const BottomNav: FC = () => {
       elevation={3}
     >
       <BottomNavigation value={getValue()} showLabels>
-        <BottomNavigationAction
-          label='Products'
-          icon={<InventoryIcon />}
-          onClick={() => router.push(`/${locale}/products`)}
-        />
-
-        <BottomNavigationAction
-          label='Tags'
-          icon={<LocalOfferIcon />}
-          onClick={() => router.push(`/${locale}/tags`)}
-        />
-
-        <BottomNavigationAction
-          label='Supermarkets'
-          icon={<StorefrontIcon />}
-          onClick={() => router.push(`/${locale}/supermarkets`)}
-        />
-
-        <BottomNavigationAction
-          label='Cart'
-          icon={<ShoppingBasketIcon />}
-          onClick={() => router.push(`/${locale}/cart`)}
-        />
+        {NAV_ITEMS.map(item => (
+          <BottomNavigationAction
+            key={item.path}
+            icon={<Link href={item.path}>{item.icon}</Link>}
+            label={<Link href={item.path}>{item.label}</Link>}
+          />
+        ))}
       </BottomNavigation>
     </Paper>
   );
