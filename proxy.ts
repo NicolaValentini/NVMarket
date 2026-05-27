@@ -53,7 +53,7 @@ export function proxy(request: NextRequest) {
 
     response = NextResponse.redirect(url);
   } else {
-    locale = pathname.split('/')[1] ?? i18n.defaultLocale;
+    locale = pathname.split('/')[1] || i18n.defaultLocale;
 
     response = NextResponse.next();
   }

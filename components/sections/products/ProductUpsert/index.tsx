@@ -36,7 +36,7 @@ export const ProductUpsert: FC<Props> = async ({
   ) : (
     <ProductForm
       product={product?.data}
-      tags={tags.data!}
+      tags={tags.data ?? []}
       tagsError={tagsError}
       onCloseBack={onCloseBack}
       onCloseAction={onCloseAction}

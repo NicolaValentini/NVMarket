@@ -86,7 +86,7 @@ export const PriceForm: FC<Props> = ({
           <input
             type='hidden'
             name='product'
-            value={product?.id || priceProps?.product_id}
+            value={product?.id ?? priceProps?.product_id}
           />
 
           <DialogTitle>{isEdit ? 'Edit Price' : 'New Price'}</DialogTitle>

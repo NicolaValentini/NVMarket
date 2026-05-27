@@ -24,7 +24,7 @@ export const getPriceDisplayName = ({
 export const validateId = (id: string) => {
   const errors: IdErrors = {};
 
-  if (!id.trim()) errors.id = 'Field required';
+  if (!id?.trim()) errors.id = 'Missing id';
 
   return errors;
 };
@@ -35,8 +35,8 @@ export const validateSupermarket = ({
 }: Omit<Supermarket, 'id'>) => {
   const errors: SupermarketErrors = {};
 
-  if (!name.trim()) errors.name = 'Field required';
-  if (!color.trim()) errors.color = 'Field required';
+  if (!name?.trim()) errors.name = 'Field required';
+  if (!color?.trim()) errors.color = 'Field required';
 
   return errors;
 };
@@ -44,8 +44,8 @@ export const validateSupermarket = ({
 export const validateTag = ({ name, color }: Omit<Tag, 'id'>) => {
   const errors: TagErrors = {};
 
-  if (!name.trim()) errors.name = 'Field required';
-  if (!color.trim()) errors.color = 'Field required';
+  if (!name?.trim()) errors.name = 'Field required';
+  if (!color?.trim()) errors.color = 'Field required';
 
   return errors;
 };
@@ -56,7 +56,7 @@ export const validateProduct = ({
 }: Omit<Product, 'id'> & { tags: string[] }) => {
   const errors: ProductErrors = {};
 
-  if (!name.trim()) errors.name = 'Field required';
+  if (!name?.trim()) errors.name = 'Field required';
   if (!tags.filter(Boolean).length) errors.tags = 'Field required';
 
   return errors;
@@ -74,12 +74,12 @@ export const validatePrice = ({
 }) => {
   const errors: PriceErrors = {};
 
-  if (!name.trim()) errors.name = 'Field required';
+  if (!name?.trim()) errors.name = 'Field required';
   if (!price) errors.price = 'Field required';
   if (Number.isNaN(price)) errors.price = 'Value not allowed';
   if (yuka && Number.isNaN(yuka)) errors.price = 'Value not allowed';
-  if (!product_id.trim()) errors.product_id = 'Field required';
-  if (!supermarket_id.trim()) errors.supermarket_id = 'Field required';
+  if (!product_id?.trim()) errors.product_id = 'Field required';
+  if (!supermarket_id?.trim()) errors.supermarket_id = 'Field required';
 
   return errors;
 };
@@ -92,4 +92,4 @@ export const successResult = <T = unknown>(data?: T, message?: string) =>
 export const checkDataFound = (result?: Result, addChecks?: boolean) =>
   addChecks || result?.isError || !result?.data
     ? (result?.message ?? 'No data found')
-    : '';
+    : undefined;

@@ -116,7 +116,7 @@ export const SupermarketForm: FC<Props> = ({
               </List>
             </Paper>
 
-            <ErrorAlert message={errors.result} />
+            <ErrorAlert message={errors.result ?? errors.id} />
           </DialogContent>
 
           <DialogActions>

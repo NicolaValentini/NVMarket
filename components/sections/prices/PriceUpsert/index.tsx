@@ -43,7 +43,7 @@ export const PriceUpsert: FC<Props> = async ({
   ) : (
     <PriceForm
       {...(isEdit ? { price: price!.data! } : { product: product!.data! })}
-      supermarkets={supermarkets.data!}
+      supermarkets={supermarkets.data ?? []}
       supermarketsError={supermarketsError}
       onCloseBack={onCloseBack}
       onCloseAction={onCloseAction}
