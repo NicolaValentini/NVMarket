@@ -59,16 +59,16 @@ export const PriceList: FC<Props> = ({ productId }) => {
 
   return (
     <List disablePadding>
-      {result.data.map((price, i, array) => (
+      {result.data.map(price => (
         <ColoredListItem
           key={price.id}
+          divider
           item={{
             id: price.id,
             name: price.supermarketName,
             color: price.supermarketColor,
           }}
           sx={{ paddingLeft: 10 }}
-          divider={i < array.length - 1}
           primary={getPriceDisplayName(price)}
           secondaryAction={
             <Box sx={{ display: 'flex', gap: 1 }}>
