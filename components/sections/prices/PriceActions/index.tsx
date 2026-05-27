@@ -1,17 +1,14 @@
-'use client';
-
-import { FC, startTransition, use, useActionState } from 'react';
-import { useRouter } from 'next/navigation';
+import { FC } from 'react';
+import Link from 'next/link';
 
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-import { I18nContext } from '@/context';
-import { FavoriteUpdate, Price, setFavoritePriceAction } from '@/lib';
+import { Price } from '@/lib';
+
+import { FavoriteAction } from './FavoriteAction';
 
 type Props = {
   action: 'create' | 'favorite' | 'edit' | 'delete';
@@ -20,68 +17,39 @@ type Props = {
 };
 
 export const PriceActions: FC<Props> = ({ action, price, productId }) => {
-  const router = useRouter();
-  const { locale } = use(I18nContext);
-
   if (action === 'create' && productId) {
     return (
-      <IconButton
-        size='small'
-        onClick={() => router.push(`/${locale}/prices/create/${productId}`)}
-      >
-        <AddIcon fontSize='small' />
-      </IconButton>
+      <Link href={`/prices/create/${productId}`}>
+        <IconButton size='small'>
+          <AddIcon fontSize='small' />
+        </IconButton>
+      </Link>
     );
   }
 
   if (action === 'favorite' && price?.id) {
-    return <FavoriteButton price={price} />;
+    return <FavoriteAction price={price} />;
   }
 
   if (action === 'edit' && price?.id) {
     return (
-      <IconButton
-        size='small'
-        onClick={() => router.push(`/${locale}/prices/${price.id}/edit`)}
-      >
-        <EditIcon fontSize='small' />
-      </IconButton>
+      <Link href={`/prices/${price.id}/edit`}>
+        <IconButton size='small'>
+          <EditIcon fontSize='small' />
+        </IconButton>
+      </Link>
     );
   }
 
   if (action === 'delete' && price?.id) {
     return (
-      <IconButton
-        size='small'
-        color='error'
-        onClick={() => router.push(`/${locale}/prices/${price.id}/delete`)}
-      >
-        <DeleteIcon fontSize='small' />
-      </IconButton>
+      <Link href={`/prices/${price.id}/delete`}>
+        <IconButton size='small' color='error'>
+          <DeleteIcon fontSize='small' />
+        </IconButton>
+      </Link>
     );
   }
 
   return null;
-};
-
-const FavoriteButton: FC<Pick<Props, 'price'>> = ({ price }) => {
-  const [{ favorite }, dispatchAction, isPending] =
-    useActionState<FavoriteUpdate>(setFavoritePriceAction, {
-      favorite: !!price?.favorite,
-      id: price?.id || '',
-    });
-
-  return (
-    <IconButton
-      size='small'
-      disabled={isPending}
-      onClick={() => startTransition(dispatchAction)}
-    >
-      {favorite ? (
-        <FavoriteIcon fontSize='small' />
-      ) : (
-        <FavoriteBorderIcon fontSize='small' />
-      )}
-    </IconButton>
-  );
 };

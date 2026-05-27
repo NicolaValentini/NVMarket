@@ -1,7 +1,5 @@
-'use client';
-
-import { FC, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { FC } from 'react';
+import Link from 'next/link';
 
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,7 +8,6 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Supermarket } from '@/lib';
-import { I18nContext } from '@/context';
 
 type Props = {
   action: 'create' | 'edit' | 'delete';
@@ -18,45 +15,33 @@ type Props = {
 };
 
 export const SupermarketActions: FC<Props> = ({ action, supermarket }) => {
-  const router = useRouter();
-  const { locale } = use(I18nContext);
-
   if (action === 'create') {
     return (
-      <Button
-        variant='contained'
-        startIcon={<AddIcon />}
-        onClick={() => router.push(`/${locale}/supermarkets/create`)}
-      >
-        Add
-      </Button>
+      <Link href='/supermarkets/create'>
+        <Button variant='contained' startIcon={<AddIcon />}>
+          Add
+        </Button>
+      </Link>
     );
   }
 
   if (action === 'edit' && supermarket?.id) {
     return (
-      <IconButton
-        size='small'
-        onClick={() =>
-          router.push(`/${locale}/supermarkets/${supermarket.id}/edit`)
-        }
-      >
-        <EditIcon fontSize='small' />
-      </IconButton>
+      <Link href={`/supermarkets/${supermarket.id}/edit`}>
+        <IconButton size='small'>
+          <EditIcon fontSize='small' />
+        </IconButton>
+      </Link>
     );
   }
 
   if (action === 'delete' && supermarket?.id) {
     return (
-      <IconButton
-        size='small'
-        color='error'
-        onClick={() =>
-          router.push(`/${locale}/supermarkets/${supermarket.id}/delete`)
-        }
-      >
-        <DeleteIcon fontSize='small' />
-      </IconButton>
+      <Link href={`/supermarkets/${supermarket.id}/delete`}>
+        <IconButton size='small' color='error'>
+          <DeleteIcon fontSize='small' />
+        </IconButton>
+      </Link>
     );
   }
 
