@@ -90,11 +90,11 @@ export function decreaseCartItem(productId: string) {
   try {
     const result = getCartItemByProductId(productId);
 
-    if (result.isError) {
+    if (result.isError || !result.data) {
       throw new Error('Failed to fetch cart item by product');
     }
 
-    if (result.data && result.data.quantity > 1) {
+    if (result.data.quantity > 1) {
       getDb()
         .prepare<[number, string]>(
           `UPDATE cart_items
@@ -106,7 +106,7 @@ export function decreaseCartItem(productId: string) {
       return successResult();
     }
 
-    return deleteCartItem(productId);
+    return deleteCartItem(result.data.id);
   } catch (error) {
     console.error('Failed to update cartItem', error);
     return errorResult();

@@ -8,7 +8,8 @@ export type PriceWithSupermarket = Price & {
   supermarketColor: string;
 };
 
-export type ProductWithQuantity = Product & Pick<CartItem, 'quantity'>;
+export type ProductWithQuantity = Product &
+  Pick<CartItem, 'quantity'> & { hasPrices: boolean };
 
 export type ProductWithQuantityAndTags = ProductWithQuantity & {
   tags: Tag[];

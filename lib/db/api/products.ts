@@ -14,7 +14,12 @@ export function getProductsWithQuantity() {
     return successResult(
       getDb()
         .prepare<[], ProductWithQuantity>(
-          `SELECT DISTINCT p.*, c.quantity AS quantity
+          `SELECT DISTINCT p.*, c.quantity AS quantity,
+           EXISTS (
+             SELECT 1
+             FROM prices pr
+             WHERE pr.product_id = p.id
+           ) AS hasPrices
            FROM products p
            LEFT JOIN cart_items c ON p.id = c.product_id
            ORDER BY p.name ASC`,

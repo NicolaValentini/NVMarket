@@ -27,7 +27,7 @@ export const ProductActions: FC<Props> = ({ action, product }) => {
     );
   }
 
-  if (action === 'buy' && product?.id) {
+  if (action === 'buy' && product?.id && product.hasPrices) {
     return <QuantityInput value={product.quantity} productId={product.id} />;
   }
 
