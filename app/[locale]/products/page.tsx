@@ -25,7 +25,10 @@ export default async function ProductsPage({ searchParams }: Props) {
         action={
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <LoadingSuspense>
-              <ProductFiltersLoader />
+              <ProductFiltersLoader
+                selectedTagId={tagId}
+                selectedSupermarketId={supermarketId}
+              />
             </LoadingSuspense>
 
             <ProductActions action='create' />
@@ -41,8 +44,8 @@ export default async function ProductsPage({ searchParams }: Props) {
 }
 
 type ProductFiltersLoaderProps = {
-  selectedTagId?: string;
-  selectedSupermarketId?: string;
+  selectedTagId?: string | undefined;
+  selectedSupermarketId?: string | undefined;
 };
 
 const ProductFiltersLoader: FC<ProductFiltersLoaderProps> = async ({
