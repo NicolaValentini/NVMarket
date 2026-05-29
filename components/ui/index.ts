@@ -2,6 +2,7 @@ export * from './ColoredItems';
 export * from './ColorInput';
 export * from './EmptyState';
 export * from './PageHeader';
+export * from './ProductSelect';
 export * from './QuantityInput';
 export * from './RouterDialog';
 export * from './SupermarketSelect';

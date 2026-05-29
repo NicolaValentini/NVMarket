@@ -14,7 +14,6 @@ import {
 type Props = { productId: string } | { supermarketId: string };
 
 export const EmptyAction: FC<Props> = props => {
-  console.log({ props });
   const [, dispatchAction, isPending] = useActionState<EmptyCart>(
     'productId' in props
       ? emptyCartItemByProductIdAction
