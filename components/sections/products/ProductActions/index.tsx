@@ -13,7 +13,7 @@ import { QuantityInput } from '../../../ui';
 
 type Props = {
   action: 'create' | 'buy' | 'edit' | 'delete';
-  product?: ProductWithQuantity;
+  product?: Pick<ProductWithQuantity, 'id' | 'quantity' | 'hasPrices'>;
 };
 
 export const ProductActions: FC<Props> = ({ action, product }) => {
