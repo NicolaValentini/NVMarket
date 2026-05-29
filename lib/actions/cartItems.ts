@@ -1,8 +1,24 @@
 'use server';
 
-import { validateId } from '../utils';
-import { CartItemUpdate } from '../types';
-import { decreaseCartItem, increaseCartItem } from '../db';
+import { errorResult, validateId } from '../utils';
+import { CartItemUpdate, EmptyCart } from '../types';
+import {
+  decreaseCartItem,
+  deleteCartItemByProductId,
+  getCartItemsGroupedBySupermarket,
+  getPricesBySupermarketId,
+  increaseCartItem,
+} from '../db';
+
+export async function getCartItemsGroupedBySupermarketAction() {
+  const result = getCartItemsGroupedBySupermarket();
+
+  if (result.isError) {
+    return errorResult('Something went wrong during cart items fetching', []);
+  }
+
+  return result;
+}
 
 export async function updateCartItemAction(
   prevState: CartItemUpdate,
@@ -27,7 +43,7 @@ export async function updateCartItemAction(
   if (result.isError) {
     return {
       isError: true,
-      message: 'Something went wrong during cartItem updating',
+      message: 'Something went wrong during cart item updating',
       count: prevState.count,
       productId: prevState.productId,
     } as CartItemUpdate;
@@ -38,4 +54,72 @@ export async function updateCartItemAction(
       actionType === 'INCREASE' ? prevState.count + 1 : prevState.count - 1,
     productId: prevState.productId,
   } as CartItemUpdate;
+}
+
+export async function emptyCartItemByProductIdAction(state: EmptyCart) {
+  const productId = 'productId' in state ? state.productId : '';
+  const errors = validateId(productId);
+
+  if (Object.keys(errors).length) {
+    return {
+      isError: true,
+      message: 'Missing product id',
+      productId,
+    } as EmptyCart;
+  }
+
+  const result = await deleteCartItemByProductId(productId);
+
+  if (result.isError) {
+    return {
+      isError: true,
+      message: 'Something went wrong during cart item updating',
+      productId,
+    } as EmptyCart;
+  }
+
+  return { productId } as EmptyCart;
+}
+
+export async function emptyCartItemsBySupermarketAction(state: EmptyCart) {
+  const supermarketId = 'supermarketId' in state ? state.supermarketId : '';
+  const errors = validateId(supermarketId);
+
+  if (Object.keys(errors).length) {
+    return {
+      isError: true,
+      message: 'Missing supermarket id',
+      supermarketId,
+    } as EmptyCart;
+  }
+
+  const prices = await getPricesBySupermarketId(supermarketId);
+
+  if (prices.isError || !prices.data) {
+    return {
+      isError: true,
+      message: 'Something went wrong during prices fetching',
+      supermarketId,
+    } as EmptyCart;
+  }
+
+  let isError = false;
+
+  for (const { product_id } of prices.data) {
+    const _delete = await deleteCartItemByProductId(product_id);
+
+    if (_delete.isError) {
+      isError = true;
+    }
+  }
+
+  if (isError) {
+    return {
+      isError: true,
+      message: 'Something went wrong during cart item updating',
+      supermarketId,
+    } as EmptyCart;
+  }
+
+  return { supermarketId } as EmptyCart;
 }

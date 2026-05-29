@@ -64,3 +64,28 @@ export type NavItem = {
   icon: ReactNode;
   path: string;
 };
+
+export type CartItemGrouped = CartItem &
+  Pick<Price, 'price' | 'yuka' | 'favorite'> & {
+    productName: string;
+    priceName: string;
+  };
+
+export type CartItemComplete = CartItemGrouped & { tags: Tag[] };
+
+export type CartItemUngrouped = CartItemGrouped & {
+  supermarketId: string;
+  supermarketName: string;
+  supermarketColor: string;
+};
+
+export type CartItemsBySupermarket = {
+  supermarket: Supermarket;
+  items: CartItemComplete[];
+  total: number;
+};
+
+export type EmptyCart = {
+  message?: string;
+  isError?: boolean;
+} & ({ productId: string } | { supermarketId: string });
