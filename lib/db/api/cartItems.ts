@@ -6,31 +6,56 @@ import {
   CartItem,
   CartItemsBySupermarket,
   CartItemUngrouped,
+  CartItemWithProduct,
 } from '../../types';
 
-export function getCartItemsGroupedBySupermarket() {
+const CART_ITEMS_GROUPED_QUERY = `
+  SELECT
+  ci.id,
+  ci.quantity,
+  ci.product_id,
+  p.name AS productName,
+  pr.name AS priceName,
+  pr.price,
+  pr.yuka,
+  pr.favorite,
+  s.id AS supermarketId,
+  s.name AS supermarketName,
+  s.color AS supermarketColor
+  FROM cart_items ci
+  LEFT JOIN products p ON ci.product_id = p.id
+  LEFT JOIN prices pr ON ci.product_id = pr.product_id
+  LEFT JOIN supermarkets s ON pr.supermarket_id = s.id
+  ORDER BY s.name, p.name
+`;
+
+export function getCartItemsGroupedBySupermarketIdAndProductId(
+  productId?: string,
+  supermarketId?: string,
+) {
   try {
+    const filters: string[] = [];
+    const parameters: string[] = [];
+
+    if (productId) {
+      filters.push('ci.product_id = ?');
+      parameters.push(productId);
+    }
+
+    if (supermarketId) {
+      filters.push('s.id = ?');
+      parameters.push(supermarketId);
+    }
+
+    const whereClause = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+
+    const query = CART_ITEMS_GROUPED_QUERY.replace(
+      'ORDER',
+      `${whereClause} ORDER`,
+    );
     const rows = getDb()
-      .prepare<[], CartItemUngrouped>(
-        `SELECT
-       ci.id,
-       ci.quantity,
-       ci.product_id,
-       p.name AS productName,
-       pr.name AS priceName,
-       pr.price,
-       pr.yuka,
-       pr.favorite,
-       s.id AS supermarketId,
-       s.name AS supermarketName,
-       s.color AS supermarketColor
-       FROM cart_items ci
-       LEFT JOIN products p ON ci.product_id = p.id
-       LEFT JOIN prices pr ON ci.product_id = pr.product_id
-       LEFT JOIN supermarkets s ON pr.supermarket_id = s.id
-       ORDER BY s.name, p.name`,
-      )
-      .all();
+      .prepare<string[], CartItemUngrouped>(query)
+      .all(...parameters);
 
     const map = new Map<string, CartItemsBySupermarket>();
 
@@ -65,6 +90,24 @@ export function getCartItemsGroupedBySupermarket() {
   } catch (error) {
     console.error('Failed to fetch cart items', error);
     return errorResult<CartItemsBySupermarket[]>();
+  }
+}
+
+export function getCartItemsProducts() {
+  try {
+    return successResult(
+      getDb()
+        .prepare<[], CartItemWithProduct>(
+          `SELECT ci.id, ci.quantity, ci.product_id, p.name AS productName
+           FROM cart_items ci
+           LEFT JOIN products p ON ci.product_id = p.id
+           ORDER BY p.name`,
+        )
+        .all(),
+    );
+  } catch (error) {
+    console.error('Failed to fetch cart items', error);
+    return errorResult<CartItemWithProduct[]>();
   }
 }
 

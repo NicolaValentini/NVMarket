@@ -85,6 +85,10 @@ export type CartItemsBySupermarket = {
   total: number;
 };
 
+export type CartItemWithProduct = CartItem & {
+  productName: string;
+};
+
 export type EmptyCart = {
   message?: string;
   isError?: boolean;

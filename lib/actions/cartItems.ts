@@ -5,13 +5,30 @@ import { CartItemUpdate, EmptyCart } from '../types';
 import {
   decreaseCartItem,
   deleteCartItemByProductId,
-  getCartItemsGroupedBySupermarket,
+  getCartItemsGroupedBySupermarketIdAndProductId,
+  getCartItemsProducts,
   getPricesBySupermarketId,
   increaseCartItem,
 } from '../db';
 
-export async function getCartItemsGroupedBySupermarketAction() {
-  const result = getCartItemsGroupedBySupermarket();
+export async function getCartItemsGroupedBySupermarketAction(
+  productId?: string,
+  supermarketId?: string,
+) {
+  const result = getCartItemsGroupedBySupermarketIdAndProductId(
+    productId,
+    supermarketId,
+  );
+
+  if (result.isError) {
+    return errorResult('Something went wrong during cart items fetching', []);
+  }
+
+  return result;
+}
+
+export async function getCartItemsProductsAction() {
+  const result = getCartItemsProducts();
 
   if (result.isError) {
     return errorResult('Something went wrong during cart items fetching', []);
