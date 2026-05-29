@@ -116,15 +116,7 @@ export const ProductForm: FC<Props> = ({
               <List disablePadding>
                 <ListItem>
                   <ListItemText
-                    slotProps={{
-                      primary: {
-                        sx: {
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          gap: 0.5,
-                        },
-                      },
-                    }}
+                    slotProps={{ primary: { sx: { display: 'flex', gap: 1 } } }}
                   >
                     {name?.trim()?.toUpperCase() || 'PREVIEW'}
                     {selectedTags.map(tag => (

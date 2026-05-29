@@ -51,16 +51,8 @@ export const ProductListItem: FC<Props> = ({ product, divider }) => {
           </IconButton>
         )}
         <ListItemText
-          slotProps={{
-            primary: {
-              sx: {
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: 0.5,
-              },
-            },
-          }}
           onClick={() => setOpen(!open)}
+          slotProps={{ primary: { sx: { display: 'flex', gap: 1 } } }}
         >
           {product.name}
           {product.tags.map(tag => (

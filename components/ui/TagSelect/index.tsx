@@ -42,7 +42,7 @@ export const TagSelect: FC<Props> = ({
             multiSelected: selectedTags,
             setMultiSelected: setTags,
             renderMultiValue: selected => (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              <Box sx={{ display: 'flex', gap: 1 }}>
                 {selected.map(renderSelected)}
               </Box>
             ),
@@ -51,7 +51,7 @@ export const TagSelect: FC<Props> = ({
             singleSelected: selectedTags[0] ?? '',
             setSingleSelected: (value: string) => setTags([value]),
             renderSingleValue: selected => (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              <Box sx={{ display: 'flex', gap: 1 }}>
                 {renderSelected(selected)}
               </Box>
             ),

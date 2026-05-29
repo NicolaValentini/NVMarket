@@ -33,7 +33,7 @@ export const SupermarketSelect: FC<Props> = ({
     singleSelected={selectedSupermarket}
     setSingleSelected={setSupermarket}
     renderSingleValue={selected => (
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+      <Box sx={{ display: 'flex', gap: 1 }}>
         <ColoredBox
           key={selected}
           item={supermarkets.find(supermarket => supermarket.id === selected)!}
