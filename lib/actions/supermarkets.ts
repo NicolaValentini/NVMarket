@@ -5,7 +5,10 @@ import { revalidatePath } from 'next/cache';
 import { errorResult, validateId, validateSupermarket } from '../utils';
 import {
   createSupermarket,
+  deleteCartItemByProductId,
   deleteSupermarket,
+  getPricesByProductId,
+  getPricesBySupermarketId,
   getSupermarketById,
   getSupermarketByName,
   getSupermarkets,
@@ -115,6 +118,22 @@ export async function deleteSupermarketAction(id: string) {
   if (Object.keys(errors).length) {
     return errorResult('Missing id');
   }
+
+  const pricesResult = getPricesBySupermarketId(id);
+
+  if (pricesResult.isError) {
+    return errorResult('Something went wrong during prices fetching');
+  }
+
+  const productIds = new Set(pricesResult.data?.map(price => price.product_id));
+
+  Array.from(productIds).forEach(productId => {
+    const _pricesResult = getPricesByProductId(productId);
+
+    if (_pricesResult.data?.length === 1) {
+      deleteCartItemByProductId(productId);
+    }
+  });
 
   const result = deleteSupermarket(id);
 

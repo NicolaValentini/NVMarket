@@ -29,9 +29,27 @@ export function getPricesBySupermarketId(id: string) {
       getDb()
         .prepare<[string], Price>(
           `SELECT *
-           FROM prices p
+           FROM prices
            WHERE supermarket_id = ?
-           ORDER BY p.name ASC`,
+           ORDER BY name ASC`,
+        )
+        .all(id),
+    );
+  } catch (error) {
+    console.error('Failed to fetch prices', error);
+    return errorResult<Price[]>();
+  }
+}
+
+export function getPricesByProductId(id: string) {
+  try {
+    return successResult(
+      getDb()
+        .prepare<[string], Price>(
+          `SELECT *
+           FROM prices
+           WHERE product_id = ?
+           ORDER BY name ASC`,
         )
         .all(id),
     );

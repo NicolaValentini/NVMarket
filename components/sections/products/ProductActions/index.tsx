@@ -12,11 +12,12 @@ import { ProductWithQuantity } from '@/lib';
 import { QuantityInput } from '../../../ui';
 
 type Props = {
+  disabled?: true;
   action: 'create' | 'buy' | 'edit' | 'delete';
   product?: Pick<ProductWithQuantity, 'id' | 'quantity' | 'hasPrices'>;
 };
 
-export const ProductActions: FC<Props> = ({ action, product }) => {
+export const ProductActions: FC<Props> = ({ action, product, disabled }) => {
   if (action === 'create') {
     return (
       <Link href='/products/create'>
@@ -28,7 +29,13 @@ export const ProductActions: FC<Props> = ({ action, product }) => {
   }
 
   if (action === 'buy' && product?.id && product.hasPrices) {
-    return <QuantityInput value={product.quantity} productId={product.id} />;
+    return (
+      <QuantityInput
+        value={product.quantity}
+        productId={product.id}
+        disabled={disabled}
+      />
+    );
   }
 
   if (action === 'edit' && product?.id) {

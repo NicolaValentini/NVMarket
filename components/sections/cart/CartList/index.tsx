@@ -105,6 +105,7 @@ export const CartList: FC<Props> = async ({
                     secondaryAction={
                       <Box sx={{ display: 'flex', gap: 1 }}>
                         <ProductActions
+                          disabled
                           action='buy'
                           product={{
                             id: cartItem.product_id,

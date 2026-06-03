@@ -16,9 +16,10 @@ const max = 99;
 type Props = {
   value: number;
   productId: string;
+  disabled?: true | undefined;
 };
 
-export const QuantityInput: FC<Props> = ({ value, productId }) => {
+export const QuantityInput: FC<Props> = ({ value, productId, disabled }) => {
   const [{ count, isError }, dispatchAction, isPending] = useActionState<
     CartItemUpdate,
     'INCREASE' | 'DECREASE'
@@ -51,7 +52,7 @@ export const QuantityInput: FC<Props> = ({ value, productId }) => {
       >
         <IconButton
           onClick={handleRemove}
-          disabled={count <= min || isPending}
+          disabled={disabled || count <= min || isPending}
           sx={{ borderRadius: 0, px: 1 }}
         >
           <RemoveIcon />
@@ -92,7 +93,7 @@ export const QuantityInput: FC<Props> = ({ value, productId }) => {
 
         <IconButton
           onClick={handleAdd}
-          disabled={count >= max || isPending}
+          disabled={disabled || count >= max || isPending}
           sx={{ borderRadius: 0, px: 1 }}
         >
           <AddIcon />
